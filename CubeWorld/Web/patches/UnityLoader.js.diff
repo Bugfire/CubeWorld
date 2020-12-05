@@ -1,0 +1,11 @@
+--- public/unity/UnityLoader.js	2020-12-03 00:25:38.000000000 +0900
++++ public/unity/UnityLoader.js	2020-12-03 00:25:46.000000000 +0900
+@@ -1996,7 +1996,7 @@
+     var p = n;
+     switch (/Windows/.test(u) && (p = /Windows (.*)/.exec(u)[1], u = "Windows"), u) {
+       case "Mac OS X":
+-        p = /Mac OS X (10[\.\_\d]+)/.exec(i)[1];
++        p = /Mac OS X (1\d[\.\_\d]+)/.exec(i)[1];
+         break;
+       case "Android":
+         p = /Android ([\.\_\d]+)/.exec(i)[1];
