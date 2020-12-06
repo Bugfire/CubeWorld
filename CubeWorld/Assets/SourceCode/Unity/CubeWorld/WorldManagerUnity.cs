@@ -89,7 +89,7 @@ public class WorldManagerUnity
 
             gameManagerUnity.surroundingsUnity.CreateSurroundings(gameManagerUnity.world.configSurroundings);
 
-            gameManagerUnity.State = GameManagerUnity.GameManagerUnityState.GENERATING;
+            gameManagerUnity.SetState(GameState.GENERATING);
         }
     }
 
@@ -110,7 +110,7 @@ public class WorldManagerUnity
 
         worldGeneratorProcess = new GeneratorProcess(new MultiplayerGameLoaderGenerator(this, server, port), null);
 
-        gameManagerUnity.State = GameManagerUnity.GameManagerUnityState.GENERATING;
+        gameManagerUnity.SetState(GameState.GENERATING);
     }
 
     private class MultiplayerGameLoaderGenerator : CubeWorldGenerator
@@ -168,7 +168,7 @@ public class WorldManagerUnity
 
         gameManagerUnity.surroundingsUnity.CreateSurroundings(gameManagerUnity.world.configSurroundings);
 
-        gameManagerUnity.State = GameManagerUnity.GameManagerUnityState.GENERATING;
+        gameManagerUnity.SetState(GameState.GENERATING);
     }
 
 

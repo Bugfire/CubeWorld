@@ -20,12 +20,12 @@ SubShader {
 		
 		//Lighting On
 		SetTexture [_MainTex] {
-			Combine texture * primary DOUBLE, texture * primary 
+			Combine texture * primary double, texture * primary 
 		} 
 		
 		// Blend in the alpha texture
         SetTexture [_DamageTex] {
-            combine previous +- texture
+            combine previous * texture
         }
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using CubeWorld.Tiles.Rules;
 using CubeWorld.Tiles;
 using CubeWorld.World.Objects;
@@ -7,9 +8,6 @@ using CubeWorld.Items;
 
 public class PlayerControllerUnity : MonoBehaviour
 {
-    public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
-    public RotationAxes axes = RotationAxes.MouseXAndY;
-
     public float sensitivityX = 15.0f;
     public float sensitivityY = 15.0f;
 
@@ -46,6 +44,12 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private bool firstUpdate = true;
 
+    private GameController gameController {
+        get {
+            return playerUnity.gameManagerUnity.gameController;
+        }
+    }
+
     public void Start()
     {
         originalCameraRotation = playerUnity.mainCamera.transform.localRotation;
@@ -63,38 +67,35 @@ public class PlayerControllerUnity : MonoBehaviour
 
     public void UpdateControlled()
     {
-        if (playerUnity.gameManagerUnity.State == GameManagerUnity.GameManagerUnityState.GAME &&
+        if (playerUnity.gameManagerUnity.GetState() == GameState.GAME &&
             playerUnity.playerGUI.ActiveState == PlayerGUI.State.NORMAL)
         {
-            if (Screen.lockCursor == false)
+            if (firstUpdate)
             {
-                //Auto pause if the user leaves the game for some reason (ALT+TAB, etc..)
-                playerUnity.gameManagerUnity.Pause();
+                rotationYaxis = playerUnity.player.rotation.y;
+                rotationXaxis = playerUnity.player.rotation.x;
+                firstUpdate = false;
             }
-            else
-            {
-                if (firstUpdate)
-                {
-                    rotationYaxis = playerUnity.player.rotation.y;
-                    rotationXaxis = playerUnity.player.rotation.x;
-                    firstUpdate = false;
-                }
 
-                if (Input.GetKeyDown(KeyCode.R))
-                    playerUnity.player.ResetPosition();
+            if (Input.GetKeyDown(KeyCode.R))
+                playerUnity.player.ResetPosition();
 
-                if (Input.GetKeyDown(KeyCode.C))
-                    playerUnity.ChangeCamera();
+            if (Input.GetKeyDown(KeyCode.C))
+                playerUnity.ChangeCamera();
 
-                UpdateJump();
-                UpdateMovement();
-                UpdateCameraRotation();
-                UpdateUserActions();
-                UpdateItemOnHand();
+            UpdateJump();
+            UpdateMovement();
+            UpdateCameraRotation();
+            UpdateUserActions();
+            UpdateItemOnHand();
 
-                playerUnity.player.rotation.y = rotationYaxis;
-                playerUnity.player.rotation.x = rotationXaxis;
-            }
+            playerUnity.player.rotation.y = rotationYaxis;
+            playerUnity.player.rotation.x = rotationXaxis;
+        }
+        else
+        {
+            playerUnity.player.input.jump = false;
+            playerUnity.player.input.moveDirection = new CubeWorld.Utils.Vector3(0, 0, 0);
         }
     }
 
@@ -200,91 +201,103 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private void UpdateUserActions()
     {
-        if (playerUnity.gameManagerUnity.State == GameManagerUnity.GameManagerUnityState.GAME ||
-            playerUnity.gameManagerUnity.State == GameManagerUnity.GameManagerUnityState.PAUSE)
+        if (playerUnity.gameManagerUnity.GetState() != GameState.GAME &&
+            playerUnity.gameManagerUnity.GetState() != GameState.PAUSE) {
+            return;
+        }
+        if (userActionCooldown > 0.0f)
         {
-            Vector3 cameraPos = playerUnity.transform.position + playerUnity.GetLocalHeadPosition();
-            Vector3 cameraFwd = playerUnity.mainCamera.transform.forward;
+            userActionCooldown -= Time.deltaTime;
+        }
+        if (userActionCooldown > 0.0f)
+        {
+            return;
+        }
 
-            CubeWorld.Utils.Graphics.RaycastTileResult raycastResult = CubeWorld.Utils.Graphics.RaycastTile(
-                                                        playerUnity.player.world,
-                                                        GraphicsUnity.Vector3ToCubeWorldVector3(cameraPos),
-                                                        GraphicsUnity.Vector3ToCubeWorldVector3(cameraFwd),
-                                                        10.0f,
-                                                        true, false);
+        if (!gameController.Action)
+        {
+            return;
+        }
 
-			if (userActionCooldown > 0.0f)
-				userActionCooldown -= Time.deltaTime;
-			
-            if (userActionCooldown <= 0.0f)
+        var actionPos = gameController.ActionPos;
+        var screenSpacePos = new Vector3(actionPos.x, actionPos.y, playerUnity.mainCamera.nearClipPlane);
+        var screenWorldPos = playerUnity.mainCamera.ScreenToWorldPoint(screenSpacePos);
+        var cameraPos = playerUnity.mainCamera.transform.position;
+        var cameraFwdRaw = screenWorldPos - cameraPos;
+        if (cameraFwdRaw.sqrMagnitude <= .0000001f) {
+            return;
+        }
+        var cameraFwd = cameraFwdRaw.normalized;
+
+        var raycastResult = CubeWorld.Utils.Graphics.RaycastTile(
+                                playerUnity.player.world,
+                                GraphicsUnity.Vector3ToCubeWorldVector3(cameraPos),
+                                GraphicsUnity.Vector3ToCubeWorldVector3(cameraFwd),
+                                10.0f,
+                                true, false);
+        
+        ExecuteHandUseAnimation();
+        userActionCooldown = 0.2f;
+        if (!raycastResult.hit)
+        {
+            return;
+        }
+
+        if (gameController.ActionIsAttack)
+        {
+            if (raycastResult.position.x > 0 && raycastResult.position.x < playerUnity.player.world.tileManager.sizeX - 1 &&
+                raycastResult.position.z > 0 && raycastResult.position.z < playerUnity.player.world.tileManager.sizeZ - 1 &&
+                raycastResult.position.y > 0)
             {
-                if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+                if (playerUnity.player.world.tileManager.HasTileActions(
+                    raycastResult.position,
+                    TileActionRule.ActionType.CLICKED))
                 {
-                    ExecuteHandUseAnimation();
-
-                    userActionCooldown = 0.2f;
+                    playerUnity.player.world.gameplay.TileClicked(raycastResult.position);
                 }
-
-                if (raycastResult.hit)
+                else
                 {
-                    if (Input.GetMouseButton(0))
+                    if (playerUnity.objectInHand != null)
                     {
-                        if (raycastResult.position.x > 0 && raycastResult.position.x < playerUnity.player.world.tileManager.sizeX - 1 &&
-                            raycastResult.position.z > 0 && raycastResult.position.z < playerUnity.player.world.tileManager.sizeZ - 1 &&
-                            raycastResult.position.y > 0)
+                        switch (playerUnity.objectInHand.definition.type)
                         {
-                            if (playerUnity.player.world.tileManager.HasTileActions(
-                                raycastResult.position,
-                                TileActionRule.ActionType.CLICKED))
+                            case CWDefinition.DefinitionType.Item:
                             {
-                                playerUnity.player.world.gameplay.TileClicked(raycastResult.position);
+                                playerUnity.gameManagerUnity.fxManagerUnity.PlaySound("hitmetal", playerUnity.player.position);
+                                playerUnity.player.world.gameplay.TileHit(raycastResult.position, ((Item)playerUnity.objectInHand).itemDefinition);
+                                break;
                             }
-                            else
-                            {
-                                if (playerUnity.objectInHand != null)
-                                {
-                                    switch (playerUnity.objectInHand.definition.type)
-                                    {
-                                        case CWDefinition.DefinitionType.Item:
-                                        {
-                                            playerUnity.gameManagerUnity.fxManagerUnity.PlaySound("hitmetal", playerUnity.player.position);
-                                            playerUnity.player.world.gameplay.TileHit(raycastResult.position, ((Item)playerUnity.objectInHand).itemDefinition);
-                                            break;
-                                        }
 
-                                        default:
-                                            playerUnity.gameManagerUnity.fxManagerUnity.PlaySound("hit", playerUnity.player.position);
-                                            playerUnity.player.world.tileManager.DamageTile(raycastResult.position, 1);
-                                            break;
-                                    }
-
-                                }
-                            }
+                            default:
+                                playerUnity.gameManagerUnity.fxManagerUnity.PlaySound("hit", playerUnity.player.position);
+                                playerUnity.player.world.tileManager.DamageTile(raycastResult.position, 1);
+                                break;
                         }
+
                     }
-                    else if (Input.GetMouseButton(1))
+                }
+            }
+        }
+        else 
+        {
+            if (playerUnity.objectInHand != null && playerUnity.objectInHand.definition.type == CWDefinition.DefinitionType.Tile)
+            {
+                TileDefinition tileDefinition = (TileDefinition) playerUnity.objectInHand.definition;
+                TilePosition tileCreatePosition = raycastResult.position + CubeWorld.Utils.Graphics.GetFaceNormal(raycastResult.face);
+
+                //Don't create tile on top of the world, because no triangles are drawn on the border!
+                if (tileCreatePosition.y < playerUnity.player.world.tileManager.sizeY - 1 &&
+                    playerUnity.player.world.tileManager.IsValidTile(tileCreatePosition) &&
+                    playerUnity.player.world.tileManager.GetTileSolid(tileCreatePosition) == false)
+                {
+                    if (playerUnity.player.world.avatarManager.IsTileBlockedByAnyAvatar(tileCreatePosition) == false)
                     {
-                        if (playerUnity.objectInHand != null && playerUnity.objectInHand.definition.type == CWDefinition.DefinitionType.Tile)
-                        {
-                            TileDefinition tileDefinition = (TileDefinition) playerUnity.objectInHand.definition;
-                            TilePosition tileCreatePosition = raycastResult.position + CubeWorld.Utils.Graphics.GetFaceNormal(raycastResult.face);
+                        playerUnity.player.world.gameplay.CreateTile(tileCreatePosition, tileDefinition.tileType);
 
-                            //Don't create tile on top of the world, because no triangles are drawn on the border!
-                            if (tileCreatePosition.y < playerUnity.player.world.tileManager.sizeY - 1 &&
-                                playerUnity.player.world.tileManager.IsValidTile(tileCreatePosition) &&
-                                playerUnity.player.world.tileManager.GetTileSolid(tileCreatePosition) == false)
-                            {
-                                if (playerUnity.player.world.avatarManager.IsTileBlockedByAnyAvatar(tileCreatePosition) == false)
-                                {
-                                    playerUnity.player.world.gameplay.CreateTile(tileCreatePosition, tileDefinition.tileType);
+                        playerUnity.player.inventory.RemoveFromDefinition(tileDefinition, 1);
 
-                                    playerUnity.player.inventory.RemoveFromDefinition(tileDefinition, 1);
-
-                                    if (playerUnity.player.inventory.HasMoreOfDefinition(tileDefinition) == false)
-                                        playerUnity.objectInHand = null;
-                                }
-                            }
-                        }
+                        if (playerUnity.player.inventory.HasMoreOfDefinition(tileDefinition) == false)
+                            playerUnity.objectInHand = null;
                     }
                 }
             }
@@ -293,59 +306,34 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private void UpdateJump()
     {
-        playerUnity.player.input.jump = Input.GetKey(KeyCode.Space);
+        playerUnity.player.input.jump = gameController.Jump;
     }
 	
     private void UpdateMovement()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        Vector3 dirWalk = transform.forward * v;
-        Vector3 dirStrafe = transform.right * h;
-        Vector3 dir = dirWalk + dirStrafe;
+        var move = gameController.Move;
+        var dirWalk = transform.forward * move.y;
+        var dirStrafe = transform.right * move.x;
+        var dir = dirWalk + dirStrafe;
         dir.y = 0;
-        dir.Normalize();
 
         playerUnity.player.input.moveDirection = GraphicsUnity.Vector3ToCubeWorldVector3(dir);
     }
 
     private void UpdateCameraRotation()
     {
-        if (Screen.lockCursor)
-        {
-            if (axes == RotationAxes.MouseXAndY)
-            {
-                // Read the mouse input axis
-                rotationYaxis += Input.GetAxis("Mouse X") * sensitivityX;
-                rotationXaxis += Input.GetAxis("Mouse Y") * sensitivityY;
+        var rawRotation = gameController.Rotation;
+        rotationYaxis += rawRotation.x * sensitivityX;
+        rotationXaxis += rawRotation.y * sensitivityY;
 
-                rotationYaxis = ClampAngle(rotationYaxis, minimumX, maximumX);
-                rotationXaxis = ClampAngle(rotationXaxis, minimumY, maximumY);
+        rotationYaxis = ClampAngle(rotationYaxis, minimumX, maximumX);
+        rotationXaxis = ClampAngle(rotationXaxis, minimumY, maximumY);
 
-                Quaternion xQuaternion = Quaternion.AngleAxis(rotationYaxis, Vector3.up);
-                Quaternion yQuaternion = Quaternion.AngleAxis(rotationXaxis, Vector3.left);
+        Quaternion xQuaternion = Quaternion.AngleAxis(rotationYaxis, Vector3.up);
+        Quaternion yQuaternion = Quaternion.AngleAxis(rotationXaxis, Vector3.left);
 
-                playerUnity.mainCamera.transform.localRotation = originalCameraRotation * yQuaternion;
-                transform.localRotation = originalPlayerRotation * xQuaternion;
-            }
-            else if (axes == RotationAxes.MouseX)
-            {
-                rotationYaxis += Input.GetAxis("Mouse X") * sensitivityX;
-                rotationYaxis = ClampAngle(rotationYaxis, minimumX, maximumX);
-
-                Quaternion xQuaternion = Quaternion.AngleAxis(rotationYaxis, Vector3.up);
-                transform.localRotation = originalPlayerRotation * xQuaternion;
-            }
-            else
-            {
-                rotationXaxis += Input.GetAxis("Mouse Y") * sensitivityY;
-                rotationXaxis = ClampAngle(rotationXaxis, minimumY, maximumY);
-
-                Quaternion yQuaternion = Quaternion.AngleAxis(rotationXaxis, Vector3.left);
-                playerUnity.mainCamera.transform.localRotation = originalCameraRotation * yQuaternion;
-            }
-        }
+        playerUnity.mainCamera.transform.localRotation = originalCameraRotation * yQuaternion;
+        transform.localRotation = originalPlayerRotation * xQuaternion;
     }
 
     public static float ClampAngle(float angle, float min, float max)

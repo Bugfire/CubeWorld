@@ -13,7 +13,7 @@ public class GUIStatePlayerInventory : GUIState
         this.playerGUI = playerGUI;
     }
 
-    public override void ProcessKeys()
+    public override void ProcessKeys(GameController gameController)
     {
         if (Input.GetKeyDown(KeyCode.B))
             playerGUI.ExitInventory();
