@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpriteAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: WebGL
+      m_MaxTextureSize: 512
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: f9cd64b131c05467181255680b7d82fb, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: de7cd9339e1e646e7907d73814a6784b, type: 3}
+  - {fileID: 21300000, guid: c5392a73991254476a0e1987fcb5f609, type: 3}
+  - {fileID: 21300000, guid: ebed33d33da37450aa926597d8d37ad9, type: 3}
+  - {fileID: 21300000, guid: bcceb2a4663be4abebd4d0e75013fdf6, type: 3}
+  - {fileID: 21300000, guid: 3526f265c51d641fca6277d6407d8479, type: 3}
+  - {fileID: 21300000, guid: b5f5e30883baa4889a6667773289dd59, type: 3}
+  - {fileID: 21300000, guid: 5e7c3429d0bb74388814eb9af7c8627c, type: 3}
+  - {fileID: 21300000, guid: a9d17deecc68f4de896a8ae0bc511233, type: 3}
+  - {fileID: 21300000, guid: 36f38a5fccab24686a8ca7d61a2d54f8, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - frame
+  - close
+  - refresh
+  - circle
+  - build
+  - mma
+  - jump
+  - inventry
+  - settings
+  m_Tag: SpriteAtlas
+  m_IsVariant: 0

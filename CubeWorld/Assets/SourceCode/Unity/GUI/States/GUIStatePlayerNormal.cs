@@ -15,7 +15,7 @@ public class GUIStatePlayerNormal : GUIState
         this.playerGUI = playerGUI;
     }
 
-    public override void ProcessKeys()
+    public override void ProcessKeys(GameController gameController)
     {
         for (int i = (int)KeyCode.Alpha1; i <= (int)KeyCode.Alpha9; i++)
         {
@@ -28,12 +28,7 @@ public class GUIStatePlayerNormal : GUIState
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            playerGUI.playerUnity.gameManagerUnity.Pause();
-        }
-
-        if (Input.GetKeyDown(KeyCode.I))
+        if (gameController.IsOpenInventry)
             playerGUI.EnterInventory();
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -68,17 +63,15 @@ public class GUIStatePlayerNormal : GUIState
 
     public override void Draw()
     {
-        int offsetY = 0;
+        if (!CubeWorldPlayerPreferences.showFPS &&
+            !CubeWorldPlayerPreferences.showEngineStats &&
+            !showLog) {
+            return;
+        }
 
+        int offsetY = 0;
         if (CubeWorldPlayerPreferences.showFPS)
             GUI.Label(new Rect(0, offsetY++ * 20, Screen.width, 25), "FPS: " + playerGUI.lastFps);
-
-        if (CubeWorldPlayerPreferences.showHelp)
-        {
-            GUI.Box(new Rect(0, offsetY * 20, 300, 100), "");
-            GUI.Label(new Rect(0, offsetY * 20, 300, 100), "Press 'I' to enter Inventory\nRight click to add objects\nLeft click to activate / destroy them\nYou can disable this dialog from the options screen! (press ESCAPE)");
-            offsetY += 5;
-        }
 
         if (CubeWorldPlayerPreferences.showEngineStats)
         {
@@ -96,8 +89,6 @@ public class GUIStatePlayerNormal : GUIState
             GUI.TextArea(new Rect(0, offsetY * 20, Screen.width, 200), CWConsole.Singleton.TextLog);
             offsetY += 10;
         }
-
-        GUI.Box(new Rect((Screen.width - 10) / 2, (Screen.height - 10) / 2, 10, 10), "+");
     }
 }
 

@@ -1,17 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using CubeWorld.Configuration;
+using CubeWorld.Gameplay;
 
 public class GameManagerUnity : MonoBehaviour
 {
-    public enum GameManagerUnityState
-    {
-        MAIN_MENU,
-        GAME,
-        GENERATING,
-        PAUSE
-    }
-
     public CubeWorld.World.CubeWorld world;
 
     public Material material;
@@ -27,40 +20,46 @@ public class GameManagerUnity : MonoBehaviour
     public SurroundingsUnity surroundingsUnity;
     public WorldManagerUnity worldManagerUnity;
 
+    [SerializeField]
+    private Prefabs.ProgressBar progressBar;
+
+    [SerializeField]
+    private UnityNativeHandler unityNativeHandler;
+
     [HideInInspector]
     public PlayerUnity playerUnity;
 
-    private GameManagerUnityState state;
-    private GameManagerUnityState newState;
-    private MainMenu mainMenu;
+    private GameState currentState;
+    private GameState state;
+
+    [SerializeField]
+    public GameController gameController;
+    [SerializeField]
+    private Menu.Activator menuActivator;
 
 	public SectorManagerUnity sectorManagerUnity;
 	
 	public CWObjectsManagerUnity objectsManagerUnity;
     public CWFxManagerUnity fxManagerUnity;
 
-    public GameManagerUnityState State
-    {
-        get { return newState; }
-        set { this.newState = value; }
-    }
+    private const string CubeworldWebServerServerRegister = "http://cubeworldweb.appspot.com/register?owner={owner}&description={description}&port={port}";
 
     public void Start()
     {
-        Application.RegisterLogCallback(HandleLog);
-
         MeshUtils.InitStaticValues();
         CubeWorldPlayerPreferences.LoadPreferences();
         PreferencesUpdated();
 
-        State = state = GameManagerUnityState.MAIN_MENU;
-        mainMenu = new MainMenu(this);
+        state = currentState = GameState.MAIN_MENU;
+        menuActivator.SetState(Menu.State.MAIN);
 
 		sectorManagerUnity = new SectorManagerUnity(this);
 		objectsManagerUnity = new CWObjectsManagerUnity(this);
         fxManagerUnity = new CWFxManagerUnity(this);
 
         worldManagerUnity = new WorldManagerUnity(this);
+
+        unityNativeHandler.GameToWeb("Kernel", "Initialized");
 	}
 
     public void DestroyWorld()
@@ -80,6 +79,21 @@ public class GameManagerUnity : MonoBehaviour
 		playerUnity = null;
 
         System.GC.Collect(System.GC.MaxGeneration, System.GCCollectionMode.Forced);
+    }
+
+    public void SetState(GameState _state)
+    {
+        state = _state;
+    }
+
+    public GameState GetState()
+    {
+        return state;
+    }
+
+    public bool IsPaused()
+    {
+        return state == GameState.PAUSE;
     }
 
     static private string GetConfigText(string resourceName)
@@ -168,7 +182,7 @@ public class GameManagerUnity : MonoBehaviour
 
         if (timerUpdate <= 0 && (registerWebServerRequest == null || registerWebServerRequest.isDone == true))
         {
-            string url = MainMenu.CubeworldWebServerServerRegister;
+            string url = CubeworldWebServerServerRegister;
             url = url.Replace("{owner}", "fede");
             url = url.Replace("{description}", "cwserver");
             url = url.Replace("{port}", CubeWorld.Gameplay.MultiplayerServerGameplay.SERVER_PORT.ToString());
@@ -183,23 +197,26 @@ public class GameManagerUnity : MonoBehaviour
     {
         GetComponent<Camera>().enabled = false;
 
-        LockCursor();
-
-        State = GameManagerUnityState.GAME;
+        state = GameState.GAME;
     }
 
-    public void Pause()
+    public bool Pause()
     {
-        ReleaseCursor();
-
-        State = GameManagerUnityState.PAUSE;
+        if (state != GameState.GAME) {
+            return false;
+        }
+        state = GameState.PAUSE;
+        menuActivator.SetState(Menu.State.PAUSE);
+        return true;
     }
 
     public void Unpause()
     {
-        LockCursor();
-
-        State = GameManagerUnityState.GAME;
+        if (state != GameState.PAUSE) {
+            return;
+        }
+        state = GameState.GAME;
+        menuActivator.SetState(Menu.State.NONE);
     }
 
     public void ReturnToMainMenu()
@@ -208,7 +225,8 @@ public class GameManagerUnity : MonoBehaviour
 
         GetComponent<Camera>().enabled = true;
 
-        State = GameManagerUnityState.MAIN_MENU;
+        state = GameState.MAIN_MENU;
+        menuActivator.SetState(Menu.State.MAIN);
     }
 
     public void Update()
@@ -218,9 +236,9 @@ public class GameManagerUnity : MonoBehaviour
             RegisterInWebServer();
 #endif
 
-        switch (state)
+        switch (currentState)
         {
-            case GameManagerUnityState.GENERATING:
+            case GameState.GENERATING:
             {
                 if (worldManagerUnity.worldGeneratorProcess != null && worldManagerUnity.worldGeneratorProcess.IsFinished() == false)
                 {
@@ -238,10 +256,10 @@ public class GameManagerUnity : MonoBehaviour
                 break;
             }
 
-            case GameManagerUnityState.PAUSE:
-            case GameManagerUnityState.GAME:
+            case GameState.PAUSE:
+            case GameState.GAME:
             {
-                if (world != null)
+                if (world != null && playerUnity != null)
                 {
                     surroundingsUnity.UpdateSkyColor();
                     playerUnity.UpdateControlled();
@@ -252,8 +270,13 @@ public class GameManagerUnity : MonoBehaviour
             }
         }
 
-        if (newState != state)
-            state = newState;
+        currentState = state;
+        switch (state) {
+            case GameState.GENERATING:
+                progressBar.SetText(worldManagerUnity.worldGeneratorProcess.ToString());
+                progressBar.SetProgress(worldManagerUnity.worldGeneratorProcess.GetProgress() / 100f);
+                break;
+        }
     }
 	
 	private float textureAnimationTimer;
@@ -277,46 +300,6 @@ public class GameManagerUnity : MonoBehaviour
 		}
 	}
 
-    public void OnGUI()
-    {
-        switch (state)
-        {
-            case GameManagerUnityState.GENERATING:
-                if (worldManagerUnity.worldGeneratorProcess != null)
-                    mainMenu.DrawGeneratingProgress(worldManagerUnity.worldGeneratorProcess.ToString(), worldManagerUnity.worldGeneratorProcess.GetProgress());
-                break;
-
-            case GameManagerUnityState.MAIN_MENU:
-                mainMenu.Draw();
-                break;
-
-            case GameManagerUnityState.PAUSE:
-                mainMenu.DrawPause();
-                break;
-        }
-
-        if (internalErrorLog != null)
-        {
-            GUI.TextArea(new Rect(0, 0, Screen.width, Screen.height / 4), internalErrorLog);
-            if (GUI.Button(new Rect(0, Screen.height / 4, 100, 20), "Clear Log"))
-            {
-                internalErrorLog = null;
-            }
-        }
-    }
-
-    public void ReleaseCursor()
-    {
-        Screen.lockCursor = false;
-        Cursor.visible = true;
-    }
-
-    public void LockCursor()
-    {
-        Screen.lockCursor = true;
-        Cursor.visible = false;
-    }
-
     public void PreferencesUpdated()
     {
         if (playerUnity)
@@ -325,13 +308,46 @@ public class GameManagerUnity : MonoBehaviour
         }
     }
 
-    private string internalErrorLog = null;
+    private CubeWorld.Configuration.Config lastConfig; 
 
-    private void HandleLog(string log, string stackTrace, LogType type) 
+
+    public bool HasLastConfig()
     {
-        if (internalErrorLog == null)
-            internalErrorLog = "";
-        internalErrorLog += log + "\n";
+        return lastConfig != null;
+    }
+
+    public void Generate(int currentDayInfoOffset, int currentGeneratorOffset, int currentSizeOffset, int currentGameplayOffset, bool multiplayer)
+    {
+        var availableConfigurations = GameManagerUnity.LoadConfiguration();;
+        lastConfig = new CubeWorld.Configuration.Config();
+        lastConfig.tileDefinitions = availableConfigurations.tileDefinitions;
+        lastConfig.itemDefinitions = availableConfigurations.itemDefinitions;
+        lastConfig.avatarDefinitions = availableConfigurations.avatarDefinitions;
+        lastConfig.dayInfo = availableConfigurations.dayInfos[currentDayInfoOffset];
+        lastConfig.worldGenerator = availableConfigurations.worldGenerators[currentGeneratorOffset];
+        lastConfig.worldSize = availableConfigurations.worldSizes[currentSizeOffset];
+        lastConfig.extraMaterials = availableConfigurations.extraMaterials;
+        lastConfig.gameplay = GameplayFactory.AvailableGameplays[currentGameplayOffset];
+
+        if (multiplayer)
+        {
+            MultiplayerServerGameplay multiplayerServerGameplay = new MultiplayerServerGameplay(lastConfig.gameplay.gameplay, true);
+            GameplayDefinition g = new GameplayDefinition("", "", multiplayerServerGameplay, false);
+            lastConfig.gameplay = g;
+            RegisterInWebServer();
+        }
+
+        worldManagerUnity.CreateRandomWorld(lastConfig);
+        menuActivator.SetState(Menu.State.NONE);
+    }
+
+    public void ReGenerate() {
+        if (!HasLastConfig()) {
+            return;
+        }
+        GetComponent<Camera>().enabled = true;
+        worldManagerUnity.CreateRandomWorld(lastConfig);
+        menuActivator.SetState(Menu.State.NONE);
     }
 }
 
