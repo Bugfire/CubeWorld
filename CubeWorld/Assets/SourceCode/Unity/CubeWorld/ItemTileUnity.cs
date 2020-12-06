@@ -8,7 +8,7 @@ public class ItemTileUnity : MonoBehaviour
     public const float ITEM_TILE_SCALE = CubeWorld.Utils.Graphics.ITEM_TILE_SIZE / CubeWorld.Utils.Graphics.TILE_SIZE;
     public const float ROTATION_SPEED = 180.0f;
 
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
     public ItemTile item;
 
     private Mesh mesh;

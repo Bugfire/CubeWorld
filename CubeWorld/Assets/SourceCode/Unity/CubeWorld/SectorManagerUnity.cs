@@ -2,134 +2,134 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CubeWorld.Tiles;
-using Unity.CubeWorld.VisibleSectorsStrategies;
 using CubeWorld.Sectors;
 
-public class SectorManagerUnity
+namespace GameScene
 {
-    public enum VisibleStrategy
+    public class SectorManagerUnity
     {
-        All,
-        Radius
-    }
-
-	public GameManagerUnity gameManagerUnity;
-	
-	private List<SectorUnity> cacheSectors = new List<SectorUnity>();
-	private Dictionary<TilePosition, SectorUnity> lastSectorAssignmentCache = new Dictionary<TilePosition, SectorUnity>();
-	
-    private List<SectorUnity> unitySectors = new List<SectorUnity>();
-
-    private GameObject goContainer;
-
-    private VisibleSectorsStrategy visibleStrategy;
-	
-	public SectorManagerUnity (GameManagerUnity gameManagerUnity)
-	{
-		this.gameManagerUnity = gameManagerUnity;
-	}
-	
-	public void Clear()
-	{
-        foreach (SectorUnity unitySector in unitySectors)
-            GameObject.DestroyImmediate(unitySector.gameObject);
-		
-        unitySectors.Clear();
-		cacheSectors.Clear();
-		lastSectorAssignmentCache.Clear();
-
-        if (goContainer)
+        public enum VisibleStrategy
         {
-            GameObject.DestroyImmediate(goContainer);
-            goContainer = null;
+            All,
+            Radius
         }
 
-        if (visibleStrategy != null)
-        {
-            visibleStrategy.Clear();
-            visibleStrategy = null;
-        }
-	}
-	
-	public void ReturnSectorUnityToCache(SectorUnity sectorUnity)
-	{
-		lastSectorAssignmentCache[sectorUnity.GetSector().sectorPosition] = sectorUnity;
-		cacheSectors.Add(sectorUnity);
-		sectorUnity.GetSector().SetSectorGraphics(null);
-	}
+        public GameManagerUnity gameManagerUnity;
 
-    public SectorUnity GetSectorUnityFromCache(Sector sector)
-    {
-        if (goContainer == null)
+        private List<SectorUnity> cacheSectors = new List<SectorUnity>();
+        private Dictionary<TilePosition, SectorUnity> lastSectorAssignmentCache = new Dictionary<TilePosition, SectorUnity>();
+
+        private List<SectorUnity> unitySectors = new List<SectorUnity>();
+
+        private GameObject goContainer;
+
+        private VisibleSectorsStrategy visibleStrategy;
+
+        public SectorManagerUnity(GameManagerUnity gameManagerUnity)
         {
-            goContainer = new GameObject();
-            goContainer.name = "Sectors";
-            goContainer.transform.position = new Vector3(0, 0, 0);
-            goContainer.transform.rotation = Quaternion.identity;
-            goContainer.transform.localScale = new Vector3(1, 1, 1);
+            this.gameManagerUnity = gameManagerUnity;
         }
 
-		SectorUnity sectorUnity = null;
-		
-		if (lastSectorAssignmentCache.ContainsKey(sector.sectorPosition))
-		{
-			sectorUnity = lastSectorAssignmentCache[sector.sectorPosition];
-			if (sectorUnity.IsInUse())
-				sectorUnity = null;
-			else
-				cacheSectors.Remove(sectorUnity);
-		}
-		
-		if (sectorUnity == null)
-		{
-			if (cacheSectors.Count > 0)
-			{
-				sectorUnity = cacheSectors[cacheSectors.Count - 1];
-				cacheSectors.RemoveAt(cacheSectors.Count - 1);
-			}
-			else
-			{
-	            GameObject g = new GameObject();
-        		sectorUnity = (SectorUnity)g.AddComponent(typeof(SectorUnity));
-	            sectorUnity.gameManagerUnity = gameManagerUnity;
-                sectorUnity.transform.parent = goContainer.transform;
-	
-	            unitySectors.Add(sectorUnity);
-			}
-		}
-		
-        sectorUnity.transform.position = GraphicsUnity.TilePositionToVector3(sector.tileOffset);
-		sector.SetSectorGraphics(sectorUnity);
-
-        sectorUnity.name = sector.sectorPosition.y + "," + sector.sectorPosition.x + "," + sector.sectorPosition.z;
-		
-		return sectorUnity;
-    }
-
-    private VisibleStrategy activeVisibleStrategy;
-
-    public void UpdateVisibleSectors()
-    {
-        if (activeVisibleStrategy != CubeWorldPlayerPreferences.visibleStrategy || visibleStrategy == null)
+        public void Clear()
         {
-            Clear();
+            foreach (SectorUnity unitySector in unitySectors)
+                GameObject.DestroyImmediate(unitySector.gameObject);
 
-            activeVisibleStrategy = CubeWorldPlayerPreferences.visibleStrategy;
+            unitySectors.Clear();
+            cacheSectors.Clear();
+            lastSectorAssignmentCache.Clear();
 
-            switch (activeVisibleStrategy)
+            if (goContainer)
             {
-                case VisibleStrategy.Radius:
-                    this.visibleStrategy = new VisibleSectorsStrategyRadius(this, gameManagerUnity.world.sectorManager, gameManagerUnity.world.avatarManager.player, gameManagerUnity.playerUnity);
-                    break;
+                GameObject.DestroyImmediate(goContainer);
+                goContainer = null;
+            }
 
-                case VisibleStrategy.All:
-                    this.visibleStrategy = new VisibleSectorsStrategyAll(this, gameManagerUnity.world.sectorManager);
-                    break;
+            if (visibleStrategy != null)
+            {
+                visibleStrategy.Clear();
+                visibleStrategy = null;
             }
         }
 
-        visibleStrategy.Update();
+        public void ReturnSectorUnityToCache(SectorUnity sectorUnity)
+        {
+            lastSectorAssignmentCache[sectorUnity.GetSector().sectorPosition] = sectorUnity;
+            cacheSectors.Add(sectorUnity);
+            sectorUnity.GetSector().SetSectorGraphics(null);
+        }
+
+        public SectorUnity GetSectorUnityFromCache(Sector sector)
+        {
+            if (goContainer == null)
+            {
+                goContainer = new GameObject();
+                goContainer.name = "Sectors";
+                goContainer.transform.position = new Vector3(0, 0, 0);
+                goContainer.transform.rotation = Quaternion.identity;
+                goContainer.transform.localScale = new Vector3(1, 1, 1);
+            }
+
+            SectorUnity sectorUnity = null;
+
+            if (lastSectorAssignmentCache.ContainsKey(sector.sectorPosition))
+            {
+                sectorUnity = lastSectorAssignmentCache[sector.sectorPosition];
+                if (sectorUnity.IsInUse())
+                    sectorUnity = null;
+                else
+                    cacheSectors.Remove(sectorUnity);
+            }
+
+            if (sectorUnity == null)
+            {
+                if (cacheSectors.Count > 0)
+                {
+                    sectorUnity = cacheSectors[cacheSectors.Count - 1];
+                    cacheSectors.RemoveAt(cacheSectors.Count - 1);
+                }
+                else
+                {
+                    GameObject g = new GameObject();
+                    sectorUnity = (SectorUnity)g.AddComponent(typeof(SectorUnity));
+                    sectorUnity.gameManagerUnity = gameManagerUnity;
+                    sectorUnity.transform.parent = goContainer.transform;
+
+                    unitySectors.Add(sectorUnity);
+                }
+            }
+
+            sectorUnity.transform.position = GraphicsUnity.TilePositionToVector3(sector.tileOffset);
+            sector.SetSectorGraphics(sectorUnity);
+
+            sectorUnity.name = sector.sectorPosition.y + "," + sector.sectorPosition.x + "," + sector.sectorPosition.z;
+
+            return sectorUnity;
+        }
+
+        private VisibleStrategy activeVisibleStrategy;
+
+        public void UpdateVisibleSectors()
+        {
+            if (activeVisibleStrategy != Shared.Settings.visibleStrategy || visibleStrategy == null)
+            {
+                Clear();
+
+                activeVisibleStrategy = Shared.Settings.visibleStrategy;
+
+                switch (activeVisibleStrategy)
+                {
+                    case VisibleStrategy.Radius:
+                        this.visibleStrategy = new VisibleSectorsStrategyRadius(this, gameManagerUnity.world.sectorManager, gameManagerUnity.world.avatarManager.player, gameManagerUnity.playerUnity);
+                        break;
+
+                    case VisibleStrategy.All:
+                        this.visibleStrategy = new VisibleSectorsStrategyAll(this, gameManagerUnity.world.sectorManager);
+                        break;
+                }
+            }
+
+            visibleStrategy.Update();
+        }
     }
 }
-
-

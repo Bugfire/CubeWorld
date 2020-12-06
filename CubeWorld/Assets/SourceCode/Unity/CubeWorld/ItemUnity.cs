@@ -4,7 +4,7 @@ using CubeWorld.Tiles;
 
 public class ItemUnity : MonoBehaviour
 {
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
     public CubeWorld.Items.Item item; 
 	
     void Start()

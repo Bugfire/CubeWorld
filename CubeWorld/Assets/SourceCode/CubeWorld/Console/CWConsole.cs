@@ -42,11 +42,15 @@ namespace CubeWorld.Console
 
         public void Log(CWConsole.LogLevel level, string message)
         {
-            log.AppendLine(level.ToString() + " : " + message);
-            logCopy = null;
-
             if (listener != null)
+            {
                 listener.Log(level, message);
+            }
+            else
+            {
+                log.AppendLine(level.ToString() + " : " + message);
+                logCopy = null;
+            }
         }
 
         static public void LogError(string message)

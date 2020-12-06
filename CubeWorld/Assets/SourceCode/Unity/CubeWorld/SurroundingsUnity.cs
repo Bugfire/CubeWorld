@@ -8,7 +8,7 @@ public class SurroundingsUnity : MonoBehaviour
     public Material nightSkybox;
     public Material materialSurrounding;
 
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
 
     private float deltaColorTransition;
     private Color currentColor = Color.green;

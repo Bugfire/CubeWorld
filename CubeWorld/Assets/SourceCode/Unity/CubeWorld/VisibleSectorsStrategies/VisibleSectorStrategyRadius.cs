@@ -5,7 +5,7 @@ using CubeWorld.Tiles;
 using CubeWorld.Avatars;
 using CubeWorld.Utils;
 
-namespace Unity.CubeWorld.VisibleSectorsStrategies
+namespace GameScene
 {
     public class VisibleSectorsStrategyRadius : VisibleSectorsStrategy
     {
