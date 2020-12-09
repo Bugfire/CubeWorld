@@ -1,9 +1,29 @@
 <template>
   <div class="chat">
     <div class="title">
-      Chat<button class="toggle" @click="toggleBody">-</button>
+      Chat
     </div>
-    <div v-show="isVisible" class="body">
+    <div class="body">
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
+    oops<br>
     oops<br>
     oops<br>
     oops<br>
@@ -17,7 +37,7 @@
     aa<br>
     </div>
     <div class="input">
-      <input type="text" />
+      <input type="text" /><button class="send" @click="send">送信</button>
     </div>
   </div>
 </template>
@@ -28,22 +48,17 @@ import { defineComponent, ref } from "vue";
 export default defineComponent({
   name: "Chat",
   setup() {
-    const isVisible = ref(false);
-    const toggleBody = () => {
-      isVisible.value = !isVisible.value;
+    const send = () => {
       window.prompt('ほ');
     };
-    return { toggleBody, isVisible };
+    return { send };
   }
 });
 </script>
 
 <style scoped>
 .chat {
-  width: 30%;
-  right: 16px;
-  top: 16px;
-  position: absolute;
+  width: 100%;
   background: #eee;
   display: flex;
   flex-direction: column;
@@ -57,15 +72,11 @@ export default defineComponent({
 .title {
   padding: 4px;
   background: #888;
-  height: 1.5rem;
-}
-
-.toggle {
-  float: right;
+  flex-basis: 1.5rem;
 }
 
 .body {
-  max-height: 10rem;
+  flex-grow: 1;
   overflow-x: auto;
   overflow-y: scroll;
 }
@@ -73,10 +84,14 @@ export default defineComponent({
 .input {
   display: flex;
   flex-direction: row;
-  height: 1.5rem;
+  flex-basis: 1.5rem;
 }
 
 .input input {
   flex-grow: 1;
+}
+
+.input .send {
+  float: right;
 }
 </style>

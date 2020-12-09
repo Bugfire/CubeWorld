@@ -1,19 +1,23 @@
 <template>
   <div class="game">
-    <div v-if="isLoading" class="overlay">
-      <Progress :value="unityProgress" />
+    <div class="main">
+      <div v-if="isLoading" class="overlay">
+        <Progress :value="unityProgress" />
+      </div>
+      <Unity
+        class="unity"
+        ref="unity"
+        loaderUrl="unity/UnityLoader.js"
+        configUrl="unity/BuildWebGL.json"
+        style="width: 100%; height: 100%"
+        :onLoad="onUnityLoad"
+        :onProgressChanged="onUnityProgressChanged"
+      />
     </div>
-    <Unity
-      class="unity"
-      ref="unity"
-      loaderUrl="unity/UnityLoader.js"
-      configUrl="unity/BuildWebGL.json"
-      style="width: 100%; height: 100%"
-      :onLoad="onUnityLoad"
-      :onProgressChanged="onUnityProgressChanged"
-    />
-    <ChatWindow>
-    </ChatWindow>
+    <div class="sub">
+      <ChatWindow>
+      </ChatWindow>
+    </div>
   </div>
 </template>
 
@@ -124,6 +128,34 @@ export default defineComponent({
 <style scoped>
 .game {
   height: 100%;
+}
+
+/* デフォルト - 左右レイアウト */
+.game {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+}
+
+.sub {
+  width: 33%;
+}
+
+/* 上下レイアウト */
+@media (max-aspect-ratio: 4/3) {
+  .game {
+    display: block;
+  }
+
+  .main {
+    height: 67vh;
+  }
+
+  .sub {
+    width: auto;
+  }
 }
 
 .overlay {
