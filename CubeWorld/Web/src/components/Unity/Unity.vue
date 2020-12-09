@@ -18,7 +18,7 @@ export default defineComponent({
       required: true
     },
     onLoad: {
-      type: Function as PropType<null | ((instance: UnityInstance) => void)>,
+      type: Function as PropType<null | ((instance: UnityInstance, canvas: HTMLCanvasElement) => void)>,
       required: false,
       default: null
     },
@@ -47,7 +47,8 @@ export default defineComponent({
               props.onProgressChanged(progress);
             }
             if (progress >= 1 && props.onLoad !== null) {
-              props.onLoad(instance);
+              const canvas = document.getElementById("#canvas");
+              props.onLoad(instance, canvas as HTMLCanvasElement);
             }
           }
         });

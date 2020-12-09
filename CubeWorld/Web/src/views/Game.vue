@@ -12,12 +12,15 @@
       :onLoad="onUnityLoad"
       :onProgressChanged="onUnityProgressChanged"
     />
+    <ChatWindow>
+    </ChatWindow>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, ref } from "vue";
 import Unity from "@/components/Unity/Unity.vue";
+import ChatWindow from "@/components/Chat/ChatWindow.vue";
 import Progress from "@/components/UI/Progress.vue";
 import { UnityInstance } from "../components/Unity/UnityLoaderUtil";
 
@@ -25,12 +28,14 @@ export default defineComponent({
   name: "Game",
   components: {
     Unity,
+    ChatWindow,
     Progress
   },
   setup() {
     const unity = ref<typeof Unity | null>(null);
     const isLoading = ref(true);
     const unityProgress = ref(0);
+    let unityInstance: UnityInstance | null = null;
 
     const unityMessageHandler = (tag: string, message: string) => {
       if (tag === "Kernel") {
@@ -47,6 +52,21 @@ export default defineComponent({
       document.body.style.height = window.innerHeight + "px";
     };
 
+    let lastFocus = false;
+    const onClick = (e: MouseEvent) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const newFocus = (e as any).target.id === "#canvas";
+      if (lastFocus === newFocus) {
+        return;
+      }
+      lastFocus = newFocus;
+      unityInstance?.SendMessage(
+        "NativeHandler",
+        "WebToGame",
+        `setFocus,${newFocus ? "1" : "0"}`
+      );
+    };
+
     // 行儀が悪いが全画面のために外部の要素も変更する
     const externalElements = () => {
       const elems: HTMLElement[] = [];
@@ -57,6 +77,7 @@ export default defineComponent({
 
     onMounted(() => {
       window.addEventListener("resize", onResize);
+      window.addEventListener("click", onClick);
       externalElements().forEach(elem => {
         elem.style.overflow = "hidden";
         elem.style.height = "100%";
@@ -68,6 +89,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("click", onResize);
       externalElements().forEach(elem => {
         elem.style.overflow = "";
         elem.style.height = "";
@@ -80,9 +102,12 @@ export default defineComponent({
       unityProgress.value = progress;
     };
 
-    let unityInstance: UnityInstance | null = null;
-    const onUnityLoad = (_unityInstance: UnityInstance) => {
+    const onUnityLoad = (
+      _unityInstance: UnityInstance,
+      canvas: HTMLCanvasElement
+    ) => {
       unityInstance = _unityInstance;
+      canvas.setAttribute("tabindex", "1");
     };
 
     return {
