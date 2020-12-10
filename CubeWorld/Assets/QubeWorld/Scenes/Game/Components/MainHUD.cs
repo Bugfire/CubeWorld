@@ -2,64 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainHUD : MonoBehaviour
+namespace GameScene
 {
-    [SerializeField]
-    private GameManagerUnity gameManagerUnity;
-    [SerializeField]
-    private Prefabs.ProgressBar progressBar;
-    [SerializeField]
-    private GameController gameController;
-
-    private GameState lastState;
-
-    /*
-     *              NONE
-     *                |
-     *                v
-     *       +--  MAIN_MENU <--+
-     *       |                 |
-     *       v                 |
-     *   GENERATING ------->  GAME
-     *       ^                  ^
-     *       |                  v
-     *       +--------------- PAUSE
-     */
-
-
-    #region Unity Lifecycles
-
-    void Start()
+    public class MainHUD : MonoBehaviour
     {
-        lastState = GameState.NONE;
-        progressBar.SetVisible(false);
-        gameController.SetVisible(false);
-    }
+        [SerializeField]
+        private GameManagerUnity gameManagerUnity;
+        [SerializeField]
+        private ProgressBar progressBar;
+        [SerializeField]
+        private GameController gameController;
 
-    void Update()
-    {
-        var state = gameManagerUnity.GetState();
-        if (state != lastState)
+        private GameState lastState;
+
+        /*
+        *              NONE
+        *                |
+        *                v
+        *       +--  MAIN_MENU <--+
+        *       |                 |
+        *       v                 |
+        *   GENERATING ------->  GAME
+        *       ^                  ^
+        *       |                  v
+        *       +--------------- PAUSE
+        */
+
+
+        #region Unity Lifecycles
+
+        void Start()
         {
-            switch (state)
-            {
-                case GameState.TITLE_MENU:
-                    gameController.SetVisible(false);
-                    break;
-                case GameState.GENERATING:
-                    progressBar.SetVisible(true);
-                    gameController.SetVisible(false);
-                    break;
-                case GameState.GAME:
-                    progressBar.SetVisible(false);
-                    gameController.SetVisible(true);
-                    break;
-                case GameState.PAUSE_MENU:
-                    break;
-            }
-            lastState = state;
+            lastState = GameState.NONE;
+            progressBar.SetVisible(false);
+            gameController.SetVisible(false);
         }
-    }
 
-    #endregion
+        void Update()
+        {
+            var state = gameManagerUnity.GetState();
+            if (state != lastState)
+            {
+                switch (state)
+                {
+                    case GameState.GENERATING:
+                        progressBar.SetVisible(true);
+                        gameController.SetVisible(false);
+                        break;
+                    case GameState.GAME:
+                        progressBar.SetVisible(false);
+                        gameController.SetVisible(true);
+                        break;
+                    case GameState.PAUSE_MENU:
+                        break;
+                }
+                lastState = state;
+            }
+        }
+
+        #endregion
+    }
 }

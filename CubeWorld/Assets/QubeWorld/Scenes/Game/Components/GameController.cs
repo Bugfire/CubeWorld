@@ -1,84 +1,87 @@
 ﻿using System;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+namespace GameScene
 {
-    [SerializeField]
-    private Game.Activator activator;
-    [SerializeField]
-    private MovePointer movePointer;
-    [SerializeField]
-    private JumpButton jumpButton;
-    [SerializeField]
-    private ScreenInput screenInput;
-    [SerializeField]
-    private ActionSelect actionSelect;
-    [SerializeField]
-    private InventryButton inventryButton;
-
-    public Vector2 Move
+    public class GameController : MonoBehaviour
     {
-        get
+        [SerializeField]
+        private Activator activator;
+        [SerializeField]
+        private MovePointer movePointer;
+        [SerializeField]
+        private JumpButton jumpButton;
+        [SerializeField]
+        private ScreenInput screenInput;
+        [SerializeField]
+        private ActionSelect actionSelect;
+        [SerializeField]
+        private InventryButton inventryButton;
+
+        public Vector2 Move
         {
-            return movePointer.Move;
+            get
+            {
+                return movePointer.Move;
+            }
         }
-    }
 
-    public bool Jump
-    {
-        get
+        public bool Jump
         {
-            return jumpButton.Jump;
+            get
+            {
+                return jumpButton.Jump;
+            }
         }
-    }
 
-    public bool Action
-    {
-        get
+        public bool Action
         {
-            return screenInput.Action;
+            get
+            {
+                return screenInput.Action;
+            }
         }
-    }
 
-    public bool ActionIsAttack
-    {
-        get
+        public bool ActionIsAttack
         {
-            return actionSelect.IsAttack;
+            get
+            {
+                return actionSelect.IsAttack;
+            }
         }
-    }
 
-    public Vector3 ActionPos
-    {
-        get
+        public Vector3 ActionPos
         {
-            return screenInput.ActionPos;
+            get
+            {
+                return screenInput.ActionPos;
+            }
         }
-    }
 
-    public Vector2 Rotation
-    {
-        get
+        public Vector2 Rotation
         {
-            return screenInput.Rotation;
+            get
+            {
+                return screenInput.Rotation;
+            }
         }
-    }
 
-    // TODO: Menu Layer
-    public bool IsOpenInventry
-    {
-        get
+        // TODO: Menu Layer
+        public bool IsOpenInventry
         {
-            return inventryButton.IsOpenInventry;
+            get
+            {
+                return inventryButton.IsOpenInventry;
+            }
         }
+
+        #region Public methods
+
+        public void SetVisible(bool visible)
+        {
+            gameObject.SetActive(visible);
+        }
+
+        #endregion
     }
-
-    #region Public methods
-
-    public void SetVisible(bool visible)
-    {
-        gameObject.SetActive(visible);
-    }
-
-    #endregion
 }

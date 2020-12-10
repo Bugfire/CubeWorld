@@ -2,18 +2,18 @@
 
 namespace Shared
 {
-    public class Options : MonoBehaviour
+    public class OptionsMenu : MonoBehaviour
     {
         [SerializeField]
         private GameManagerUnity gameManagerUnity;
         [SerializeField]
-        private Prefabs.MenuButton drawDistance;
+        private MenuItem drawDistance;
         [SerializeField]
-        private Prefabs.MenuButton showFPS;
+        private MenuItem showFPS;
         [SerializeField]
-        private Prefabs.MenuButton showEngineStats;
+        private MenuItem showEngineStats;
         [SerializeField]
-        private Prefabs.MenuButton visibleStrategy;
+        private MenuItem visibleStrategy;
 
         #region Unity Lifecycles
 

@@ -21,20 +21,20 @@ public class GameManagerUnity : MonoBehaviour
     public WorldManagerUnity worldManagerUnity;
 
     [SerializeField]
-    private Prefabs.ProgressBar progressBar;
+    private GameScene.ProgressBar progressBar;
 
     [HideInInspector]
     public PlayerUnity playerUnity;
 
-    private GameState currentState;
-    private GameState state;
+    private GameScene.GameState currentState;
+    private GameScene.GameState state;
 
     [SerializeField]
-    public GameController gameController;
+    public GameScene.GameController gameController;
     [SerializeField]
-    private Game.Activator menuActivator;
+    private GameScene.Activator menuActivator;
     [SerializeField]
-    private Message message;
+    private GameScene.Message message;
 
 	public SectorManagerUnity sectorManagerUnity;
 	
@@ -48,8 +48,8 @@ public class GameManagerUnity : MonoBehaviour
         MeshUtils.InitStaticValues();
         PreferencesUpdated();
 
-        state = currentState = GameState.GENERATING;
-        menuActivator.State = Game.MenuState.NONE;
+        state = currentState = GameScene.GameState.GENERATING;
+        menuActivator.State = GameScene.MenuState.NONE;
 
 		sectorManagerUnity = new SectorManagerUnity(this);
 		objectsManagerUnity = new CWObjectsManagerUnity(this);
@@ -60,16 +60,12 @@ public class GameManagerUnity : MonoBehaviour
         if (!Shared.SceneLoader.SetupGameWithArgs(this))
         {
             Debug.Log("No args. Run with default arguments...");
-            var generateArgs = new Shared.GenerateArgs();
-            Generate(
-                    generateArgs.DayInfoOffset,
-                    generateArgs.GeneratorOffset,
-                    generateArgs.SizeOffset,
-                    generateArgs.GameplayOffset,
-                    generateArgs.Multiplayer);
+            var args = new Shared.GameLaunchArgsGenerate();
+            args.Reset();
+            args.Setup(this);
         }
 
-        Common.NativeHandler.SendStartEvent();
+        CommonScene.NativeHandler.SendStartEvent();
 	}
 
     public void DestroyWorld()
@@ -91,19 +87,19 @@ public class GameManagerUnity : MonoBehaviour
         System.GC.Collect(System.GC.MaxGeneration, System.GCCollectionMode.Forced);
     }
 
-    public void SetState(GameState _state)
+    public void SetState(GameScene.GameState _state)
     {
         state = _state;
     }
 
-    public GameState GetState()
+    public GameScene.GameState GetState()
     {
         return state;
     }
 
     public bool IsPaused()
     {
-        return state == GameState.PAUSE_MENU;
+        return state == GameScene.GameState.PAUSE_MENU;
     }
 
     static private string GetConfigText(string resourceName)
@@ -207,27 +203,27 @@ public class GameManagerUnity : MonoBehaviour
     {
         GetComponent<Camera>().enabled = false;
 
-        Common.Message.AddMessage("Welcome!");
-        state = GameState.GAME;
+        CommonScene.Message.AddMessage("Welcome!");
+        state = GameScene.GameState.GAME;
     }
 
     public bool Pause()
     {
-        if (state != GameState.GAME) {
+        if (state != GameScene.GameState.GAME) {
             return false;
         }
-        state = GameState.PAUSE_MENU;
-        menuActivator.State = Game.MenuState.PAUSE;
+        state = GameScene.GameState.PAUSE_MENU;
+        menuActivator.State = GameScene.MenuState.PAUSE;
         return true;
     }
 
     public void Unpause()
     {
-        if (state != GameState.PAUSE_MENU) {
+        if (state != GameScene.GameState.PAUSE_MENU) {
             return;
         }
-        state = GameState.GAME;
-        menuActivator.State = Game.MenuState.NONE;
+        state = GameScene.GameState.GAME;
+        menuActivator.State = GameScene.MenuState.NONE;
     }
 
     public void ReturnToTitleMenu()
@@ -236,7 +232,7 @@ public class GameManagerUnity : MonoBehaviour
 
         GetComponent<Camera>().enabled = true;
 
-        Shared.SceneLoader.GoTitle();
+        Shared.SceneLoader.GoToTitleScene();
     }
 
     public void Update()
@@ -248,7 +244,7 @@ public class GameManagerUnity : MonoBehaviour
 
         switch (currentState)
         {
-            case GameState.GENERATING:
+            case GameScene.GameState.GENERATING:
             {
                 if (worldManagerUnity.worldGeneratorProcess != null && worldManagerUnity.worldGeneratorProcess.IsFinished() == false)
                 {
@@ -266,8 +262,8 @@ public class GameManagerUnity : MonoBehaviour
                 break;
             }
 
-            case GameState.PAUSE_MENU:
-            case GameState.GAME:
+            case GameScene.GameState.PAUSE_MENU:
+            case GameScene.GameState.GAME:
             {
                 if (world != null && playerUnity != null)
                 {
@@ -282,7 +278,7 @@ public class GameManagerUnity : MonoBehaviour
 
         currentState = state;
         switch (state) {
-            case GameState.GENERATING:
+            case GameScene.GameState.GENERATING:
                 progressBar.SetText(worldManagerUnity.worldGeneratorProcess.ToString());
                 progressBar.SetProgress(worldManagerUnity.worldGeneratorProcess.GetProgress() / 100f);
                 break;
@@ -326,20 +322,20 @@ public class GameManagerUnity : MonoBehaviour
         return lastConfig != null;
     }
 
-    public void Generate(int currentDayInfoOffset, int currentGeneratorOffset, int currentSizeOffset, int currentGameplayOffset, bool multiplayer)
+    public void Generate(Shared.GameLaunchArgsGenerate args)
     {
         var availableConfigurations = GameManagerUnity.LoadConfiguration();;
         lastConfig = new CubeWorld.Configuration.Config();
         lastConfig.tileDefinitions = availableConfigurations.tileDefinitions;
         lastConfig.itemDefinitions = availableConfigurations.itemDefinitions;
         lastConfig.avatarDefinitions = availableConfigurations.avatarDefinitions;
-        lastConfig.dayInfo = availableConfigurations.dayInfos[currentDayInfoOffset];
-        lastConfig.worldGenerator = availableConfigurations.worldGenerators[currentGeneratorOffset];
-        lastConfig.worldSize = availableConfigurations.worldSizes[currentSizeOffset];
+        lastConfig.dayInfo = availableConfigurations.dayInfos[args.DayInfoOffset];
+        lastConfig.worldGenerator = availableConfigurations.worldGenerators[args.GeneratorOffset];
+        lastConfig.worldSize = availableConfigurations.worldSizes[args.SizeOffset];
         lastConfig.extraMaterials = availableConfigurations.extraMaterials;
-        lastConfig.gameplay = GameplayFactory.AvailableGameplays[currentGameplayOffset];
+        lastConfig.gameplay = GameplayFactory.AvailableGameplays[args.GameplayOffset];
 
-        if (multiplayer)
+        if (args.Multiplayer)
         {
             MultiplayerServerGameplay multiplayerServerGameplay = new MultiplayerServerGameplay(lastConfig.gameplay.gameplay, true);
             GameplayDefinition g = new GameplayDefinition("", "", multiplayerServerGameplay, false);
@@ -348,7 +344,7 @@ public class GameManagerUnity : MonoBehaviour
         }
 
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.State = Game.MenuState.NONE;
+        menuActivator.State = GameScene.MenuState.NONE;
     }
 
     public void ReGenerate() {
@@ -357,7 +353,7 @@ public class GameManagerUnity : MonoBehaviour
         }
         GetComponent<Camera>().enabled = true;
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.State = Game.MenuState.NONE;
+        menuActivator.State = GameScene.MenuState.NONE;
     }
 }
 

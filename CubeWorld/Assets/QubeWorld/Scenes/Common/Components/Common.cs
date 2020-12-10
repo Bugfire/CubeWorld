@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Common
+namespace CommonScene
 {
-    public class DataHolder : MonoBehaviour
+    public class Common : MonoBehaviour
     {
         #region Unity lifecycles
 

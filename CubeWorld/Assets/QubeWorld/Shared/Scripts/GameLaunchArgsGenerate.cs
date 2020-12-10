@@ -1,12 +1,21 @@
 ﻿namespace Shared
 {
-    public struct GenerateArgs
+    public class GameLaunchArgsGenerate : GameLaunchArgs
     {
         public int GameplayOffset;
         public int SizeOffset;
         public int GeneratorOffset;
         public int DayInfoOffset;
         public bool Multiplayer;
+
+        #region GameLaunchArgs implements
+
+        public void Setup(GameManagerUnity gameManagerUnity)
+        {
+            gameManagerUnity.Generate(this);
+        }
+
+        #endregion
 
         #region Public methods
 
@@ -16,8 +25,10 @@
             GeneratorOffset = 0;
             SizeOffset = 0;
             GameplayOffset = 0;
+            Multiplayer = false;
         }
 
         #endregion
+
     }
 }

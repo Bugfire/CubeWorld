@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 801946009}
   - component: {fileID: 801946008}
   m_Layer: 0
-  m_Name: DataHolder
+  m_Name: Common
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

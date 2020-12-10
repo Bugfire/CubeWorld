@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Title
+namespace TitleScene
 {
-    public class JoinMultiplayer : MonoBehaviour
+    public class JoinMultiplayerMenu : MonoBehaviour
     {
         [SerializeField]
         private MenuActivator activator;
@@ -10,7 +10,7 @@ namespace Title
         private WWW wwwRequest;
         private string[] servers;
 
-        private const string CubeworldWebServerServerList = "http://cubeworldweb.appspot.com/list";
+        private const string cubeworldWebServerServerList = "http://cubeworldweb.appspot.com/list";
 
         #region Unity lifecycles
 
@@ -24,7 +24,7 @@ namespace Title
         {
             if (wwwRequest == null && servers == null)
             {
-                wwwRequest = new WWW(CubeworldWebServerServerList);
+                wwwRequest = new WWW(cubeworldWebServerServerList);
             }
 
             if (servers == null && wwwRequest != null && wwwRequest.isDone)
@@ -55,7 +55,8 @@ namespace Title
         {
             wwwRequest = null;
             servers = null;
-            // Shared.SceneLoader.GoGameWithMultiplayer(ss[0], System.Int32.Parse(ss[1]));
+            // var args = new GameLaunchMultiplayer() { host = ss[0], port = System.Int32.Parse(ss[1]) };
+            // Shared.SceneLoader.GoGame(args);
         }
 
         public void OnRefresh()

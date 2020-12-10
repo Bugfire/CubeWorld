@@ -1,8 +1,10 @@
-﻿public enum GameState
+﻿namespace GameScene
 {
-    NONE,
-    TITLE_MENU,
-    GAME,
-    GENERATING,
-    PAUSE_MENU
+    public enum GameState
+    {
+        NONE,
+        GAME,
+        GENERATING,
+        PAUSE_MENU
+    }
 }

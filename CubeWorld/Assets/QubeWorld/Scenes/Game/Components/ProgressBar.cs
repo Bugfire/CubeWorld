@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Prefabs
+namespace GameScene
 {
     public class ProgressBar : MonoBehaviour
     {

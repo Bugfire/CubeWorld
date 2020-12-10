@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Prefabs
+namespace Shared
 {
-    public class MenuButton : MonoBehaviour
+    public class MenuItem : MonoBehaviour
     {
         [SerializeField]
         private UnityEngine.UI.Text text;

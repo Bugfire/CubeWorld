@@ -2,26 +2,26 @@
 using CubeWorld.Gameplay;
 using CubeWorld.Configuration;
 
-namespace Title
+namespace TitleScene
 {
-    public class Generator : MonoBehaviour
+    public class GeneratorMenu : MonoBehaviour
     {
         [SerializeField]
         private MenuActivator activator;
         [SerializeField]
-        private Prefabs.MenuButton gamePlay;
+        private Shared.MenuItem gamePlay;
         [SerializeField]
-        private Prefabs.MenuButton worldSize;
+        private Shared.MenuItem worldSize;
         [SerializeField]
-        private Prefabs.MenuButton dayLength;
+        private Shared.MenuItem dayLength;
         [SerializeField]
-        private Prefabs.MenuButton generator;
+        private Shared.MenuItem generator;
         [SerializeField]
-        private Prefabs.MenuButton hostMultiplayer;
+        private Shared.MenuItem hostMultiplayer;
 
         private AvailableConfigurations availableConfigurations;
 
-        private Shared.GenerateArgs generateArgs = new Shared.GenerateArgs();
+        private Shared.GameLaunchArgsGenerate generateArgs = new Shared.GameLaunchArgsGenerate();
 
         #region Unity lifecycles
 
@@ -74,7 +74,7 @@ namespace Title
 
         public void OnGenerate()
         {
-            Shared.SceneLoader.GoGameWithGenerate(ref generateArgs);
+            Shared.SceneLoader.GoToGameScene(generateArgs);
         }
 
         #endregion

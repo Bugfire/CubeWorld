@@ -37,7 +37,7 @@ public class PlayerGUI : MonoBehaviour
     private State state;
     private GUIState activeGUIState;
     private Dictionary<State, GUIState> availableStates = new Dictionary<State, GUIState>();
-    private GameController gameController {
+    private GameScene.GameController gameController {
         get {
             return playerUnity.gameManagerUnity.gameController;
         }
@@ -59,7 +59,7 @@ public class PlayerGUI : MonoBehaviour
     {
         UpdateFPS();
 
-        if (playerUnity.gameManagerUnity.GetState() == GameState.GAME)
+        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME)
             activeGUIState.ProcessKeys(gameController);
     }
 
@@ -89,8 +89,8 @@ public class PlayerGUI : MonoBehaviour
     {
         playerUnity.DrawUnderWaterTexture();
 
-        if (playerUnity.gameManagerUnity.GetState() == GameState.GAME ||
-            playerUnity.gameManagerUnity.GetState() == GameState.PAUSE_MENU)
+        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME ||
+            playerUnity.gameManagerUnity.GetState() == GameScene.GameState.PAUSE_MENU)
             activeGUIState.Draw();
 	}
 }

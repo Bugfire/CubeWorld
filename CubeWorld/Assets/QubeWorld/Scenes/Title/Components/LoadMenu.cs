@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Game
+namespace TitleScene
 {
-    public class Save : MonoBehaviour
+    public class LoadMenu : MonoBehaviour
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
+        private MenuActivator activator;
         [SerializeField]
-        private Activator activator;
-        [SerializeField]
-        private Prefabs.MenuButton[] slots;
+        private Shared.MenuItem[] slots;
 
         #region Unity lifecycles
 
@@ -20,12 +18,12 @@ namespace Game
 
         #endregion
 
-        #region Unity events
+        #region Unity user events
 
-        public void OnSlot(int number)
+        public void OnSlot(int _number)
         {
-            gameManagerUnity.worldManagerUnity.SaveWorld(number - 1);
-            activator.SetLastState();
+            var args = new Shared.GameLaunchArgsLoadWorld() { number = _number - 1 };
+            Shared.SceneLoader.GoToGameScene(args);
         }
 
         #endregion
@@ -40,15 +38,14 @@ namespace Game
 
                 if (fileDateTime != System.DateTime.MinValue)
                 {
-                    string prefix;
-                    prefix = "上書き ";
-                    slots[i].SetText(prefix + (i + 1).ToString() + "\n[ " + fileDateTime.ToString() + " ]");
+                    slots[i].SetText(string.Format("ロード {0}\n[ {1} ]", i + 1, fileDateTime));
+                    slots[i].SetActiveFlag(true);
                 }
                 else
                 {
                     slots[i].SetText("-- データなし --");
+                    slots[i].SetActiveFlag(false);
                 }
-                slots[i].SetActiveFlag(true);
             }
         }
 

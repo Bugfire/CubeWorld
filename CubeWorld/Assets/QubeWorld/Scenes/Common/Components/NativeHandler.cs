@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 
-namespace Common
+namespace CommonScene
 {
     public class NativeHandler : MonoBehaviour
     {
@@ -21,19 +21,19 @@ namespace Common
 
         public static void SendStartEvent()
         {
-            GameToWeb("Kernel", "Initialized");
+            gameToWeb("Kernel", "Initialized");
         }
 
         public static void OpenTextInput()
         {
-            GameToWeb("Input", "text");
+            gameToWeb("Input", "text");
         }
 
         #endregion
 
         #region Private methods
 
-        private static void GameToWeb(string tag, string _message)
+        private static void gameToWeb(string tag, string _message)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             GameToWebNative(tag, _message);

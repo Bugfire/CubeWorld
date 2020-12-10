@@ -1,67 +1,70 @@
 ﻿using System;
 using UnityEngine;
 
-public class InventryButton : MonoBehaviour
+namespace GameScene
 {
-    [SerializeField]
-    private GameManagerUnity gameManagerUnity;
-    [SerializeField]
-    private Game.Activator activator;
-
-    public bool IsOpenInventry
+    public class InventryButton : MonoBehaviour
     {
-        get
+        [SerializeField]
+        private GameManagerUnity gameManagerUnity;
+        [SerializeField]
+        private GameScene.Activator activator;
+
+        public bool IsOpenInventry
         {
-            var t = isOpenInventry;
+            get
+            {
+                var t = isOpenInventry;
+                isOpenInventry = false;
+                return t;
+            }
+            private set
+            {
+                isOpenInventry = value;
+            }
+        }
+
+        private bool isOpenInventry;
+
+        #region Unity Lifecycles
+
+        void OnEnable()
+        {
             isOpenInventry = false;
-            return t;
         }
-        private set
+
+        void Update()
         {
-            isOpenInventry = value;
+            updateInput();
         }
-    }
 
-    private bool isOpenInventry;
+        #endregion
 
-    #region Unity Lifecycles
+        #region Unity User Events
 
-    void OnEnable()
-    {
-        isOpenInventry = false;
-    }
-
-    void Update()
-    {
-        updateInput();
-    }
-
-    #endregion
-
-    #region Unity User Events
-
-    public void OnClicked()
-    {
-        openInventry();
-    }
-
-    #endregion
-
-    #region Private methods
-
-    private void updateInput()
-    {
-        if (!Input.GetKeyDown(KeyCode.I))
+        public void OnClicked()
         {
-            return;
+            openInventry();
         }
-        openInventry();
-    }
 
-    private void openInventry()
-    {
-        IsOpenInventry = true;
-    }
+        #endregion
 
-    #endregion
+        #region Private methods
+
+        private void updateInput()
+        {
+            if (!Input.GetKeyDown(KeyCode.I))
+            {
+                return;
+            }
+            openInventry();
+        }
+
+        private void openInventry()
+        {
+            IsOpenInventry = true;
+        }
+
+        #endregion
+    }
 }

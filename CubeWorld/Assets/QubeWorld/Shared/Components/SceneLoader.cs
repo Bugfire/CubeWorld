@@ -13,46 +13,7 @@ namespace Shared
         private const string TITLE_SCENE_NAME = "Title";
         private const string GAME_SCENE_NAME = "Game";
 
-
-        private interface GameLaunchMode
-        {
-            void Go(GameManagerUnity gameManagerUnity);
-        }
-
-        private class GameLaunchLoadWorld : GameLaunchMode
-        {
-            public int number;
-            public void Go(GameManagerUnity gameManagerUnity)
-            {
-                gameManagerUnity.worldManagerUnity.LoadWorld(number);
-            }
-        }
-
-        private class GameLaunchGenerate : GameLaunchMode
-        {
-            public Shared.GenerateArgs generateArgs;
-            public void Go(GameManagerUnity gameManagerUnity)
-            {
-                gameManagerUnity.Generate(
-                    generateArgs.DayInfoOffset,
-                    generateArgs.GeneratorOffset,
-                    generateArgs.SizeOffset,
-                    generateArgs.GameplayOffset,
-                    generateArgs.Multiplayer);
-            }
-        }
-
-        private class GameLaunchMultiplayer : GameLaunchMode
-        {
-            public string host;
-            public int port;
-            public void Go(GameManagerUnity gameManagerUnity)
-            {
-                gameManagerUnity.worldManagerUnity.JoinMultiplayerGame(host, port);
-            }
-        }
-
-        private static GameLaunchMode gameLaunchMode;
+        private static GameLaunchArgs gameLaunchArgs;
 
         #region Unity lifecycles
 
@@ -78,25 +39,13 @@ namespace Shared
 
         #region Public methods
 
-        public static void GoGameWithLoadWorld(int _number)
+        public static void GoToGameScene(GameLaunchArgs _gameLaunchArgs)
         {
-            gameLaunchMode = new GameLaunchLoadWorld() { number = _number };
-            goGame();
+            gameLaunchArgs = _gameLaunchArgs;
+            goToGameScene();
         }
 
-        public static void GoGameWithGenerate(ref Shared.GenerateArgs _generateArgs)
-        {
-            gameLaunchMode = new GameLaunchGenerate() { generateArgs = _generateArgs };
-            goGame();
-        }
-
-        public static void GoGameWithMultiplayer(string _host, int _port)
-        {
-            gameLaunchMode = new GameLaunchMultiplayer() { host = _host, port = _port };
-            goGame();
-        }
-
-        public static void GoTitle()
+        public static void GoToTitleScene()
         {
             if (hasScene(TITLE_SCENE_NAME))
             {
@@ -108,13 +57,13 @@ namespace Shared
 
         public static bool SetupGameWithArgs(GameManagerUnity gameManagerUnity)
         {
-            if (gameLaunchMode == null)
+            if (gameLaunchArgs == null)
             {
                 return false;
             }
-            var t = gameLaunchMode;
-            gameLaunchMode = null;
-            t.Go(gameManagerUnity);
+            var t = gameLaunchArgs;
+            gameLaunchArgs = null;
+            t.Setup(gameManagerUnity);
             return true;
         }
 
@@ -135,11 +84,11 @@ namespace Shared
             return false;
         }
 
-        private static void goGame()
+        private static void goToGameScene()
         {
             if (hasScene(GAME_SCENE_NAME))
             {
-                gameLaunchMode = null;
+                gameLaunchArgs = null;
                 return;
             }
             SceneManager.LoadScene(GAME_SCENE_NAME, LoadSceneMode.Additive);

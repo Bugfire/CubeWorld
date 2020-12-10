@@ -1,17 +1,17 @@
 using UnityEngine;
 
-namespace Game
+namespace GameScene
 {
     public class Activator : MonoBehaviour
     {
         [SerializeField]
         private GameManagerUnity gameManagerUnity;
         [SerializeField]
-        private Shared.Options optionsMenu;
+        private Shared.OptionsMenu optionsMenu;
         [SerializeField]
-        private Pause pauseMenu;
+        private PauseMenu pauseMenu;
         [SerializeField]
-        private Save saveMenu;
+        private SaveMenu saveMenu;
         [SerializeField]
         private GameObject barrier;
 

@@ -2,80 +2,83 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+namespace GameScene
 {
-    [SerializeField]
-    private GameManagerUnity gameManagerUnity;
-    [SerializeField]
-    private Animator animator;
-
-    public bool Jump
+    public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        get
+        [SerializeField]
+        private GameManagerUnity gameManagerUnity;
+        [SerializeField]
+        private Animator animator;
+
+        public bool Jump
         {
-            return isKeyPressed | isButtonPressed;
+            get
+            {
+                return isKeyPressed | isButtonPressed;
+            }
         }
-    }
 
-    private bool isButtonPressed;
-    private bool isKeyPressed;
-    private bool lastJump;
+        private bool isButtonPressed;
+        private bool isKeyPressed;
+        private bool lastJump;
 
-    #region Unity Lifecycles
+        #region Unity Lifecycles
 
-    void OnEnable()
-    {
-        resetInput();
-    }
-
-    void Update()
-    {
-        if (gameManagerUnity.GetState() != GameState.GAME)
+        void OnEnable()
         {
             resetInput();
         }
-        else
+
+        void Update()
         {
-            updateInput();
+            if (gameManagerUnity.GetState() != GameState.GAME)
+            {
+                resetInput();
+            }
+            else
+            {
+                updateInput();
+            }
+            if (lastJump != Jump)
+            {
+                animator.SetTrigger(Jump ? "Pressed" : "Normal");
+                lastJump = Jump;
+            }
         }
-        if (lastJump != Jump)
+
+        #endregion
+
+        #region Unity Input Handlers
+
+        public void OnPointerDown(PointerEventData eventData)
         {
-            animator.SetTrigger(Jump ? "Pressed" : "Normal");
-            lastJump = Jump;
+            // Debug.LogFormat("OnPointerDown[{0}]: {1}", eventData.pointerId, eventData.position);
+            isButtonPressed = true;
         }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            // Debug.LogFormat("OnPointerUp[{0}]: {1}", eventData.pointerId, eventData.position);
+            isButtonPressed = false;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void resetInput()
+        {
+            isButtonPressed = false;
+            isKeyPressed = false;
+            lastJump = false;
+        }
+
+        private void updateInput()
+        {
+            isKeyPressed = Input.GetKey(KeyCode.Space);
+        }
+
+        #endregion
     }
-
-    #endregion
-
-    #region Unity Input Handlers
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        // Debug.LogFormat("OnPointerDown[{0}]: {1}", eventData.pointerId, eventData.position);
-        isButtonPressed = true;
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        // Debug.LogFormat("OnPointerUp[{0}]: {1}", eventData.pointerId, eventData.position);
-        isButtonPressed = false;
-    }
-
-    #endregion
-
-    #region Private methods
-
-    private void resetInput()
-    {
-        isButtonPressed = false;
-        isKeyPressed = false;
-        lastJump = false;
-    }
-
-    private void updateInput()
-    {
-        isKeyPressed = Input.GetKey(KeyCode.Space);
-    }
-
-    #endregion
 }

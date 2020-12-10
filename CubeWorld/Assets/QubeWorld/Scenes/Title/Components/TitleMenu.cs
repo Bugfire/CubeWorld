@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Title
+namespace TitleScene
 {
-    public class Title : MonoBehaviour
+    public class TitleMenu : MonoBehaviour
     {
         [SerializeField]
         private MenuActivator activator;

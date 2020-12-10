@@ -15,7 +15,7 @@ public class GUIStatePlayerNormal : GUIState
         this.playerGUI = playerGUI;
     }
 
-    public override void ProcessKeys(GameController gameController)
+    public override void ProcessKeys(GameScene.GameController gameController)
     {
         for (int i = (int)KeyCode.Alpha1; i <= (int)KeyCode.Alpha9; i++)
         {

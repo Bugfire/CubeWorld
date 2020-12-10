@@ -1,4 +1,4 @@
-﻿namespace Title
+﻿namespace TitleScene
 {
     public enum MenuState
     {

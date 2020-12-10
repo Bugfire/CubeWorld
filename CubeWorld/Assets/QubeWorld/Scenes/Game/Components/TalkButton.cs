@@ -1,14 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-public class TalkButton : MonoBehaviour
+namespace GameScene
 {
-    #region Unity User Events
-
-    public void OnClicked()
+    public class TalkButton : MonoBehaviour
     {
-        Common.NativeHandler.OpenTextInput();
-    }
+        #region Unity User Events
 
-    #endregion
+        public void OnClicked()
+        {
+            CommonScene.NativeHandler.OpenTextInput();
+        }
+
+        #endregion
+    }
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Title
+namespace TitleScene
 {
-    public class About : MonoBehaviour
+    public class AboutDialog : MonoBehaviour
     {
         [SerializeField]
         private UnityEngine.UI.Text text;

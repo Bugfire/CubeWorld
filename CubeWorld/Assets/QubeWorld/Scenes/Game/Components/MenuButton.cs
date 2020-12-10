@@ -1,53 +1,56 @@
 ﻿using System;
 using UnityEngine;
 
-public class MenuButton : MonoBehaviour
+namespace GameScene
 {
-    [SerializeField]
-    private GameManagerUnity gameManagerUnity;
-    [SerializeField]
-    private Game.Activator activator;
-
-    #region Unity Lifecycles
-
-    void Update()
+    public class MenuButton : MonoBehaviour
     {
-        updateInput();
-    }
+        [SerializeField]
+        private GameManagerUnity gameManagerUnity;
+        [SerializeField]
+        private Activator activator;
 
-    #endregion
+        #region Unity Lifecycles
 
-    #region Unity User Events
-
-    public void OnClicked()
-    {
-        openPauseMenu();
-    }
-
-    #endregion
-
-    #region Private methods
-
-    private void openPauseMenu()
-    {
-        gameManagerUnity.Pause();
-    }
-
-    private void updateInput()
-    {
-        if (!Input.GetKeyDown(KeyCode.Escape))
+        void Update()
         {
-            return;
+            updateInput();
         }
-        if (gameManagerUnity.GetState() == GameState.GAME)
+
+        #endregion
+
+        #region Unity User Events
+
+        public void OnClicked()
         {
             openPauseMenu();
         }
-        else
-        {
-            activator.SetLastState();
-        }
-    }
 
-    #endregion
+        #endregion
+
+        #region Private methods
+
+        private void openPauseMenu()
+        {
+            gameManagerUnity.Pause();
+        }
+
+        private void updateInput()
+        {
+            if (!Input.GetKeyDown(KeyCode.Escape))
+            {
+                return;
+            }
+            if (gameManagerUnity.GetState() == GameState.GAME)
+            {
+                openPauseMenu();
+            }
+            else
+            {
+                activator.SetLastState();
+            }
+        }
+
+        #endregion
+    }
 }

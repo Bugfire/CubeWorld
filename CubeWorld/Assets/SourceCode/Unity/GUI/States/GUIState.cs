@@ -14,7 +14,7 @@ public class GUIState
     {
     }
 
-    public virtual void ProcessKeys(GameController gameController)
+    public virtual void ProcessKeys(GameScene.GameController gameController)
     {
     }
 }

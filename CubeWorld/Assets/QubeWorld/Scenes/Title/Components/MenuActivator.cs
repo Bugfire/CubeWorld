@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 
-namespace Title
+namespace TitleScene
 {
     public class MenuActivator : MonoBehaviour
     {
         [SerializeField]
-        private Title titleMenu;
+        private TitleMenu titleMenu;
         [SerializeField]
-        private Generator generatorMenu;
+        private GeneratorMenu generatorMenu;
         [SerializeField]
-        private Shared.Options optionsMenu;
+        private Shared.OptionsMenu optionsMenu;
         [SerializeField]
-        private Load loadMenu;
+        private LoadMenu loadMenu;
         [SerializeField]
-        private JoinMultiplayer joinMultiplayerMenu;
+        private JoinMultiplayerMenu joinMultiplayerMenu;
         [SerializeField]
-        private About aboutDialog;
+        private AboutDialog aboutDialog;
         [SerializeField]
         private GameObject barrier;
 

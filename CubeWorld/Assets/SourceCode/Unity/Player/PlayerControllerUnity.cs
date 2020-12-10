@@ -44,7 +44,7 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private bool firstUpdate = true;
 
-    private GameController gameController {
+    private GameScene.GameController gameController {
         get {
             return playerUnity.gameManagerUnity.gameController;
         }
@@ -67,7 +67,7 @@ public class PlayerControllerUnity : MonoBehaviour
 
     public void UpdateControlled()
     {
-        if (playerUnity.gameManagerUnity.GetState() == GameState.GAME &&
+        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME &&
             playerUnity.playerGUI.ActiveState == PlayerGUI.State.NORMAL)
         {
             if (firstUpdate)
@@ -201,8 +201,8 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private void UpdateUserActions()
     {
-        if (playerUnity.gameManagerUnity.GetState() != GameState.GAME &&
-            playerUnity.gameManagerUnity.GetState() != GameState.PAUSE_MENU) {
+        if (playerUnity.gameManagerUnity.GetState() != GameScene.GameState.GAME &&
+            playerUnity.gameManagerUnity.GetState() != GameScene.GameState.PAUSE_MENU) {
             return;
         }
         if (userActionCooldown > 0.0f)

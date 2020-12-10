@@ -2,47 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Message : MonoBehaviour
+namespace GameScene
 {
-    [SerializeField]
-    private UnityEngine.UI.Image backgroundImage;
-    [SerializeField]
-    private UnityEngine.UI.Text text;
-
-    private int lastVersion;
-
-    #region Unity lifecycles
-
-    void Start()
+    public class Message : MonoBehaviour
     {
-        lastVersion = Common.Message.Version - 1;
-        updateTexts();
-    }
+        [SerializeField]
+        private UnityEngine.UI.Image backgroundImage;
+        [SerializeField]
+        private UnityEngine.UI.Text text;
 
-    void Update()
-    {
-        Common.Message.Update(Time.deltaTime);
-        updateTexts();
-    }
+        private int lastVersion;
 
-    #endregion
+        #region Unity lifecycles
 
-    #region Private methods
-
-    private void updateTexts()
-    {
-        if (lastVersion == Common.Message.Version)
+        void Start()
         {
-            return;
+            lastVersion = CommonScene.Message.Version - 1;
+            updateTexts();
         }
-        lastVersion = Common.Message.Version;
-        var str = Common.Message.GetMessages();
-        var isActive = !string.IsNullOrEmpty(str);
-        backgroundImage.enabled = isActive;
-        text.enabled = isActive;
-        text.text = str;
-        UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
-    }
 
-    #endregion
+        void Update()
+        {
+            CommonScene.Message.Update(Time.deltaTime);
+            updateTexts();
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void updateTexts()
+        {
+            if (lastVersion == CommonScene.Message.Version)
+            {
+                return;
+            }
+            lastVersion = CommonScene.Message.Version;
+            var str = CommonScene.Message.GetMessages();
+            var isActive = !string.IsNullOrEmpty(str);
+            backgroundImage.enabled = isActive;
+            text.enabled = isActive;
+            text.text = str;
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+        }
+
+        #endregion
+    }
 }

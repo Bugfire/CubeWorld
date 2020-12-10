@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-namespace Game
+namespace GameScene
 {
-    public class Pause : MonoBehaviour
+    public class PauseMenu : MonoBehaviour
     {
         [SerializeField]
         private GameManagerUnity gameManagerUnity;
         [SerializeField]
         private Activator activator;
         [SerializeField]
-        private Prefabs.MenuButton reCreate;
+        private Shared.MenuItem reCreate;
 
         #region Unity Lifecycles
 
