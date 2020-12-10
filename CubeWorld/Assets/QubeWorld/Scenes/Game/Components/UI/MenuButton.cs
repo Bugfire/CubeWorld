@@ -10,7 +10,7 @@ namespace GameScene
         [SerializeField]
         private Activator activator;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void Update()
         {
@@ -19,7 +19,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity User Events
+        #region Unity user events
 
         public void OnClicked()
         {

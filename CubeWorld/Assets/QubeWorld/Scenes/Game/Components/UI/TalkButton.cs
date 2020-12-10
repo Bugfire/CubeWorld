@@ -5,7 +5,7 @@ namespace GameScene
 {
     public class TalkButton : MonoBehaviour
     {
-        #region Unity User Events
+        #region Unity user events
 
         public void OnClicked()
         {

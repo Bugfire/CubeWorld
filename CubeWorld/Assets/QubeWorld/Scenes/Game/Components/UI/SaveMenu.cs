@@ -20,7 +20,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity events
+        #region Unity user events
 
         public void OnSlot(int number)
         {

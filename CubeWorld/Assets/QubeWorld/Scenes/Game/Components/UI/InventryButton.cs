@@ -26,7 +26,7 @@ namespace GameScene
 
         private bool isOpenInventry;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -40,7 +40,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity User Events
+        #region Unity user events
 
         public void OnClicked()
         {

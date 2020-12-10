@@ -23,7 +23,7 @@ namespace GameScene
         private bool isKeyPressed;
         private bool lastJump;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -49,7 +49,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity Input Handlers
+        #region Unity input handlers
 
         public void OnPointerDown(PointerEventData eventData)
         {

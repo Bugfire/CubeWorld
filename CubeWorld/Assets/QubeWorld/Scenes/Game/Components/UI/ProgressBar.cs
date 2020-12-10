@@ -9,7 +9,7 @@ namespace GameScene
         [SerializeField]
         private UnityEngine.UI.Slider slider;
 
-#region public
+        #region Public methods
 
         public void SetVisible(bool enable)
         {
@@ -26,6 +26,6 @@ namespace GameScene
             slider.value = value;
         }
 
-#endregion
+        #endregion
     }
 }

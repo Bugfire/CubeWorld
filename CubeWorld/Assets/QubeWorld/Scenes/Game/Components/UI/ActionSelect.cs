@@ -16,7 +16,7 @@ namespace GameScene
 
         public bool IsAttack { get; private set; }
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -26,7 +26,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity User vents
+        #region Unity user events
 
         public void OnClickAttack()
         {

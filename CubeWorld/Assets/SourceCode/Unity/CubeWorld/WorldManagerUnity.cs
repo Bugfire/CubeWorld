@@ -69,7 +69,7 @@ public class WorldManagerUnity
         {
             gameManagerUnity.DestroyWorld();
 
-            AvailableConfigurations configurations = GameManagerUnity.LoadConfiguration();
+            var configurations = Shared.Configure.Load();
 
             gameManagerUnity.LoadCustomTextures();
 

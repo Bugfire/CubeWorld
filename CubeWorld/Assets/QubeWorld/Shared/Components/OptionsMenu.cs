@@ -15,7 +15,7 @@ namespace Shared
         [SerializeField]
         private MenuItem visibleStrategy;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -33,7 +33,7 @@ namespace Shared
 
         #endregion
 
-        #region Unity Events
+        #region Unity user events
 
         public void OnDrawDistance()
         {

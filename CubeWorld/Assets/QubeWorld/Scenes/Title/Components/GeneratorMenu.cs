@@ -29,7 +29,7 @@ namespace TitleScene
         {
             if (availableConfigurations == null)
             {
-                availableConfigurations = GameManagerUnity.LoadConfiguration();
+                availableConfigurations = Shared.Configure.Load();
                 generateArgs.Reset();
             }
             UpdateUI();

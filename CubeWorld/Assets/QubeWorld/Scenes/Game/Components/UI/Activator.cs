@@ -36,7 +36,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity User Events
+        #region Unity user events
 
         public void OnClose()
         {

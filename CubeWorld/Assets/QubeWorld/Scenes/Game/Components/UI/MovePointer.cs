@@ -24,7 +24,7 @@ namespace GameScene
         private float lastMoveDeltaTime;
         private Vector2 displayMove;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -46,7 +46,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity Events
+        #region Unity input handlers
 
         public void OnBeginDrag(PointerEventData eventData)
         {

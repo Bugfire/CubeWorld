@@ -11,7 +11,7 @@ namespace GameScene
         [SerializeField]
         private Shared.MenuItem reCreate;
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void OnEnable()
         {
@@ -20,7 +20,7 @@ namespace GameScene
 
         #endregion
 
-        #region Unity Events
+        #region Unity user events
 
         public void OnReCreateRandomWorld()
         {

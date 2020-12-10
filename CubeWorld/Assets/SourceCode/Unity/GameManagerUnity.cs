@@ -102,46 +102,6 @@ public class GameManagerUnity : MonoBehaviour
         return state == GameScene.GameState.PAUSE_MENU;
     }
 
-    static private string GetConfigText(string resourceName)
-    {
-        string configText = ((TextAsset)Resources.Load(resourceName)).text;
-
-        #if !UNITY_WEBPLAYER
-
-        if (Application.isEditor == false && Application.platform != RuntimePlatform.WebGLPlayer)
-        {
-            try
-            {
-                string exePath = System.IO.Directory.GetParent(Application.dataPath).FullName;
-                string fileConfigPath = System.IO.Path.Combine(exePath, resourceName + ".xml");
-
-                if (System.IO.File.Exists(fileConfigPath))
-                    configText = System.IO.File.ReadAllText(fileConfigPath);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.Log(ex.ToString());
-            }
-        }
-
-        #endif
-
-        return configText;
-    }
-
-    static public AvailableConfigurations LoadConfiguration()
-    {
-        AvailableConfigurations availableConfigurations = 
-            new ConfigParserXML().Parse(
-                GetConfigText("config_misc"),
-                GetConfigText("config_tiles"),
-                GetConfigText("config_avatars"),
-                GetConfigText("config_items"),
-                GetConfigText("config_generators"));
-
-        return availableConfigurations;
-    }
-
     public void LoadCustomTextures()
     {
         #if !UNITY_WEBPLAYER
@@ -324,7 +284,7 @@ public class GameManagerUnity : MonoBehaviour
 
     public void Generate(Shared.GameLaunchArgsGenerate args)
     {
-        var availableConfigurations = GameManagerUnity.LoadConfiguration();;
+        var availableConfigurations = Shared.Configure.Load();;
         lastConfig = new CubeWorld.Configuration.Config();
         lastConfig.tileDefinitions = availableConfigurations.tileDefinitions;
         lastConfig.itemDefinitions = availableConfigurations.itemDefinitions;

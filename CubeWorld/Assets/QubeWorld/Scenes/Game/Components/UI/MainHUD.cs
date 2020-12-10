@@ -29,7 +29,7 @@ namespace GameScene
         */
 
 
-        #region Unity Lifecycles
+        #region Unity lifecycles
 
         void Start()
         {
