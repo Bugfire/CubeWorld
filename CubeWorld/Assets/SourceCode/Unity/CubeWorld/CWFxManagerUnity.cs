@@ -8,12 +8,12 @@ using CubeWorld.Items;
 public class CWFxManagerUnity : ICWFxListener
 {
     private GameObject goContainer;
-    private GameManagerUnity gameManagerUnity;
+    private GameScene.GameManagerUnity gameManagerUnity;
     private Dictionary<string, AudioClip[]> sounds = new Dictionary<string, AudioClip[]>();
     private Dictionary<string, GameObject> effects = new Dictionary<string, GameObject>();
     private Dictionary<string, System.Type> effectsComponents = new Dictionary<string, System.Type>();
 
-    public CWFxManagerUnity(GameManagerUnity gameManagerUnity)
+    public CWFxManagerUnity(GameScene.GameManagerUnity gameManagerUnity)
     {
         this.gameManagerUnity = gameManagerUnity;
 

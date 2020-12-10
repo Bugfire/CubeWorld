@@ -4,7 +4,7 @@ using CubeWorld.Avatars;
 
 public class AvatarUnity : MonoBehaviour
 {
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
 
     public CubeWorld.Avatars.Avatar avatar;
 

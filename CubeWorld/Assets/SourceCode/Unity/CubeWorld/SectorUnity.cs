@@ -5,7 +5,7 @@ using CubeWorld.Sectors;
 
 public class SectorUnity : MonoBehaviour, ISectorGraphics
 {
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
 	
     private Sector sector;
 

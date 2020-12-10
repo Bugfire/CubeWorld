@@ -4,7 +4,7 @@ using CubeWorld.Tiles;
 
 public class TileUnity : MonoBehaviour
 {
-    public GameManagerUnity gameManagerUnity;
+    public GameScene.GameManagerUnity gameManagerUnity;
     public DynamicTile tile;
 
     private Mesh mesh;

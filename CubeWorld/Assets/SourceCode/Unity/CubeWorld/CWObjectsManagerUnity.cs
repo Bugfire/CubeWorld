@@ -16,9 +16,9 @@ public class CWObjectsManagerUnity : ICWListener
 	
 	private Dictionary<CWObject, GameObject> createdGO = new Dictionary<CWObject, GameObject>();
 
-	private GameManagerUnity gameManagerUnity;
+	private GameScene.GameManagerUnity gameManagerUnity;
 	
-	public CWObjectsManagerUnity (GameManagerUnity gameManagerUnity)
+	public CWObjectsManagerUnity (GameScene.GameManagerUnity gameManagerUnity)
 	{
 		this.gameManagerUnity = gameManagerUnity;
 	}

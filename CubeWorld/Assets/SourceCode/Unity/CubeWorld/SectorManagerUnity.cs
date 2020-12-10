@@ -13,7 +13,7 @@ public class SectorManagerUnity
         Radius
     }
 
-	public GameManagerUnity gameManagerUnity;
+	public GameScene.GameManagerUnity gameManagerUnity;
 	
 	private List<SectorUnity> cacheSectors = new List<SectorUnity>();
 	private Dictionary<TilePosition, SectorUnity> lastSectorAssignmentCache = new Dictionary<TilePosition, SectorUnity>();
@@ -24,7 +24,7 @@ public class SectorManagerUnity
 
     private VisibleSectorsStrategy visibleStrategy;
 	
-	public SectorManagerUnity (GameManagerUnity gameManagerUnity)
+	public SectorManagerUnity (GameScene.GameManagerUnity gameManagerUnity)
 	{
 		this.gameManagerUnity = gameManagerUnity;
 	}

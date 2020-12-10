@@ -55,7 +55,7 @@ namespace Shared
             SceneManager.UnloadScene(GAME_SCENE_NAME);
         }
 
-        public static bool SetupGameWithArgs(GameManagerUnity gameManagerUnity)
+        public static bool SetupGameWithArgs(GameScene.GameManagerUnity gameManagerUnity)
         {
             if (gameLaunchArgs == null)
             {
