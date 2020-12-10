@@ -1825,7 +1825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe406ddd367374c12b021a5ae9a3d116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activator: {fileID: 1727500278}
+  titleScene: {fileID: 1727500278}
 --- !u!114 &449532333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3686,7 +3686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f014d93d2fa343e3be3ceca531be84b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activator: {fileID: 1727500278}
 --- !u!114 &1066447320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5073,9 +5072,9 @@ GameObject:
   - component: {fileID: 1727500274}
   - component: {fileID: 1727500273}
   - component: {fileID: 1727500272}
-  - component: {fileID: 1727500276}
+  - component: {fileID: 1727500275}
   m_Layer: 5
-  m_Name: HUD
+  m_Name: TitleScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5141,7 +5140,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!20 &1727500276
+--- !u!20 &1727500275
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5151,7 +5150,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.17737804, g: 0.20997316, b: 0.26119405, a: 1}
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -5168,8 +5167,8 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 100
-  m_Depth: -2
+  orthographic size: 5
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -5177,8 +5176,8 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
-  m_AllowMSAA: 0
+  m_HDR: 1
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -5262,7 +5261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c84be4d010746c78ffa9c6ebffad1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activator: {fileID: 1727500278}
   slots:
   - {fileID: 599818150}
   - {fileID: 689705967}
@@ -6544,7 +6542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c96fadaf04e4fc2845c79961c072ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activator: {fileID: 1727500278}
   gamePlay: {fileID: 160980151}
   worldSize: {fileID: 1249962342}
   dayLength: {fileID: 978187426}

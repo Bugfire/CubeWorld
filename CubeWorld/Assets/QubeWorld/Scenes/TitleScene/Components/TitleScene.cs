@@ -2,7 +2,7 @@
 
 namespace TitleScene
 {
-    public class MenuActivator : MonoBehaviour
+    public class TitleScene : MonoBehaviour
     {
         [SerializeField]
         private TitleMenu titleMenu;
@@ -19,9 +19,9 @@ namespace TitleScene
         [SerializeField]
         private GameObject barrier;
 
-        private MenuState lastState = MenuState.NONE;
+        private State lastState = State.NONE;
 
-        public MenuState State { get; set; }
+        public State State { get; set; }
 
         #region Unity lifecycles
 
@@ -32,13 +32,13 @@ namespace TitleScene
                 return;
             }
             lastState = State;
-            titleMenu.gameObject.SetActive(State == MenuState.TITLE);
-            generatorMenu.gameObject.SetActive(State == MenuState.GENERATOR);
-            optionsMenu.gameObject.SetActive(State == MenuState.OPTIONS);
-            loadMenu.gameObject.SetActive(State == MenuState.LOAD);
-            joinMultiplayerMenu.gameObject.SetActive(State == MenuState.JOIN_MULTIPLAYER);
-            aboutDialog.gameObject.SetActive(State == MenuState.ABOUT);
-            barrier.SetActive(State != MenuState.NONE);
+            titleMenu.gameObject.SetActive(State == State.TITLE);
+            generatorMenu.gameObject.SetActive(State == State.GENERATOR);
+            optionsMenu.gameObject.SetActive(State == State.OPTIONS);
+            loadMenu.gameObject.SetActive(State == State.LOAD);
+            joinMultiplayerMenu.gameObject.SetActive(State == State.JOIN_MULTIPLAYER);
+            aboutDialog.gameObject.SetActive(State == State.ABOUT);
+            barrier.SetActive(State != State.NONE);
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace TitleScene
 
         public void SetLastState()
         {            
-            State = MenuState.TITLE;
+            State = State.TITLE;
         }
 
         #endregion

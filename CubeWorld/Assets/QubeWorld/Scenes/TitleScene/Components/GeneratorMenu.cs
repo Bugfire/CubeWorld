@@ -7,8 +7,6 @@ namespace TitleScene
     public class GeneratorMenu : MonoBehaviour
     {
         [SerializeField]
-        private MenuActivator activator;
-        [SerializeField]
         private Shared.MenuItem gamePlay;
         [SerializeField]
         private Shared.MenuItem worldSize;

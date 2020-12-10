@@ -203,7 +203,6 @@ namespace GameScene
                 if (worldManagerUnity.IsReady)
                 {
                     PreferencesUpdated();
-                    GetComponent<Camera>().enabled = false;
                     CommonScene.Message.AddMessage("Welcome!");
                     IsGenerating = false;
                     xxx = 0;

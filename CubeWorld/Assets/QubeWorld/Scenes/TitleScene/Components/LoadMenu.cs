@@ -5,8 +5,6 @@ namespace TitleScene
     public class LoadMenu : MonoBehaviour
     {
         [SerializeField]
-        private MenuActivator activator;
-        [SerializeField]
         private Shared.MenuItem[] slots;
 
         #region Unity lifecycles

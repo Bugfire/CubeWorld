@@ -4,9 +4,6 @@ namespace TitleScene
 {
     public class JoinMultiplayerMenu : MonoBehaviour
     {
-        [SerializeField]
-        private MenuActivator activator;
-
         private WWW wwwRequest;
         private string[] servers;
 

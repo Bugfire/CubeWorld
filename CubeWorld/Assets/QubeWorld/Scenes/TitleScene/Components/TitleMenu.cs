@@ -5,33 +5,33 @@ namespace TitleScene
     public class TitleMenu : MonoBehaviour
     {
         [SerializeField]
-        private MenuActivator activator;
+        private TitleScene titleScene;
 
         #region Unity user events
 
         public void OnCreateRandomWorld()
         {
-            activator.State = MenuState.GENERATOR;
+            titleScene.State = State.GENERATOR;
         }
 
         public void OnLoadWorld()
         {
-            activator.State = MenuState.LOAD;
+            titleScene.State = State.LOAD;
         }
 
         public void OnJoinMultiPlayer()
         {
-            activator.State = MenuState.JOIN_MULTIPLAYER;
+            titleScene.State = State.JOIN_MULTIPLAYER;
         }
 
         public void OnOptions()
         {
-            activator.State = MenuState.OPTIONS;
+            titleScene.State = State.OPTIONS;
         }
 
         public void OnAbout()
         {
-            activator.State = MenuState.ABOUT;
+            titleScene.State = State.ABOUT;
         }
 
         #endregion

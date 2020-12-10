@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/QubeWorld/Scenes/Common/Common.unity
     guid: d9b0d18abc83946d6bb7829d3855a873
   - enabled: 1
-    path: Assets/QubeWorld/Scenes/Title/Title.unity
+    path: Assets/QubeWorld/Scenes/TitleScene/Title.unity
     guid: 1d5a65ed412144555aab27a47f098852
   - enabled: 1
     path: Assets/QubeWorld/Scenes/Game/Game.unity

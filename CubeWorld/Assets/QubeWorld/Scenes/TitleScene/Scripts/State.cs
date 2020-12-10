@@ -1,8 +1,8 @@
 ﻿namespace TitleScene
 {
-    public enum MenuState
+    public enum State
     {
-        NONE, // 未表示状態
+        NONE,
         TITLE,
         GENERATOR,
         OPTIONS,
