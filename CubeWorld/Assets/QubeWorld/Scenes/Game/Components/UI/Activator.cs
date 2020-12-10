@@ -49,18 +49,14 @@ namespace GameScene
 
         public void SetLastState()
         {
-            var gameState = gameManagerUnity.GetState();
-            switch (gameState)
-            {
-                case GameState.PAUSE_MENU:
-                    if (State == MenuState.PAUSE)
-                    {
-                        gameManagerUnity.Unpause();
-                    }
-                    else
-                    {
-                        State = MenuState.PAUSE;
-                    }
+            switch (State) {
+                case MenuState.NONE:
+                    break;
+                case MenuState.PAUSE:
+                    gameManagerUnity.Unpause();
+                    break;
+                default:
+                    State = MenuState.PAUSE;
                     break;
             }
         }

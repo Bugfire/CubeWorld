@@ -11,8 +11,7 @@ public class NonPlayerAvatarUnity : AvatarUnity
     {
         base.Update();
 
-        if (gameManagerUnity.GetState() == GameScene.GameState.GAME ||
-            gameManagerUnity.GetState() == GameScene.GameState.PAUSE_MENU)
+        if (!gameManagerUnity.IsGenerating)
             UpdateAvatarPosition();
     }
 

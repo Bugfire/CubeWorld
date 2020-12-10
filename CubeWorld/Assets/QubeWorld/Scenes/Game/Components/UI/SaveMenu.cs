@@ -36,13 +36,11 @@ namespace GameScene
         {
             for (int i = 0; i < 5; i++)
             {
-                System.DateTime fileDateTime = WorldManagerUnity.GetWorldFileInfo(i);
+                System.DateTime fileDateTime = Shared.WorldFileIO.GetInfo(i);
 
                 if (fileDateTime != System.DateTime.MinValue)
                 {
-                    string prefix;
-                    prefix = "上書き ";
-                    slots[i].SetText(prefix + (i + 1).ToString() + "\n[ " + fileDateTime.ToString() + " ]");
+                    slots[i].SetText(string.Format("上書き {0}\n[ {1} ]", i + 1, fileDateTime.ToString()));
                 }
                 else
                 {

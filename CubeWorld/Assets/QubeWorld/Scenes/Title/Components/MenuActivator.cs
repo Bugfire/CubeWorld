@@ -55,7 +55,7 @@ namespace TitleScene
         #region Public methods
 
         public void SetLastState()
-        {
+        {            
             State = MenuState.TITLE;
         }
 

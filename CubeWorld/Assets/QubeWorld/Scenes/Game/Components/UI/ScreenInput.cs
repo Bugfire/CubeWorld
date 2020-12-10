@@ -70,7 +70,7 @@ namespace GameScene
 
         void Update()
         {
-            if (gameManagerUnity.GetState() != GameState.GAME)
+            if (gameManagerUnity.IsPlayable)
             {
                 resetInput();
             }

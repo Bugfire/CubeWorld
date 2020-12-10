@@ -40,16 +40,35 @@ namespace GameScene
         public CWObjectsManagerUnity objectsManagerUnity;
         public CWFxManagerUnity fxManagerUnity;
 
-        private bool isGenerating;
+        public bool IsGenerating { get; set; }
+
+        public bool IsPaused {
+            get
+            {
+                return
+                    menuActivator.State == MenuState.PAUSE ||
+                    menuActivator.State == MenuState.OPTIONS ||
+                    menuActivator.State == MenuState.SAVE;
+            }
+        }
+
+        public bool IsPlayable {
+            get
+            {
+                return !IsGenerating && menuActivator.State == MenuState.NONE;
+            }
+        }
 
         private const string CubeworldWebServerServerRegister = "http://cubeworldweb.appspot.com/register?owner={owner}&description={description}&port={port}";
 
         public void Start()
         {
+            UnityEngine.SceneManagement.SceneManager.SetActiveScene(gameObject.scene);
+    
             MeshUtils.InitStaticValues();
             PreferencesUpdated();
 
-            isGenerating = true;
+            IsGenerating = true;
             menuActivator.State = GameScene.MenuState.NONE;
 
             sectorManagerUnity = new SectorManagerUnity(this);
@@ -86,11 +105,6 @@ namespace GameScene
             playerUnity = null;
 
             System.GC.Collect(System.GC.MaxGeneration, System.GCCollectionMode.Forced);
-        }
-
-        public bool IsPaused()
-        {
-            return state == GameScene.GameState.PAUSE_MENU;
         }
 
         public void LoadCustomTextures()
@@ -148,22 +162,20 @@ namespace GameScene
 
         public bool Pause()
         {
-            if (state != GameScene.GameState.GAME)
+            if (menuActivator.State != MenuState.NONE)
             {
                 return false;
             }
-            state = GameScene.GameState.PAUSE_MENU;
             menuActivator.State = GameScene.MenuState.PAUSE;
             return true;
         }
 
         public void Unpause()
         {
-            if (state != GameScene.GameState.PAUSE_MENU)
+            if (!IsPaused)
             {
                 return;
             }
-            state = GameScene.GameState.GAME;
             menuActivator.State = GameScene.MenuState.NONE;
         }
 
@@ -176,6 +188,8 @@ namespace GameScene
             Shared.SceneLoader.GoToTitleScene();
         }
 
+        static int xxx = 0;
+
         public void Update()
         {
 #if !UNITY_WEBPLAYER
@@ -183,7 +197,7 @@ namespace GameScene
                 RegisterInWebServer();
 #endif
 
-            if (isGenerating)
+            if (IsGenerating)
             {
                 worldManagerUnity.Update();
                 if (worldManagerUnity.IsReady)
@@ -191,8 +205,8 @@ namespace GameScene
                     PreferencesUpdated();
                     GetComponent<Camera>().enabled = false;
                     CommonScene.Message.AddMessage("Welcome!");
-                    isGenerating = false;
-                    state = GameScene.GameState.GAME;
+                    IsGenerating = false;
+                    xxx = 0;
                 }
                 else
                 {
@@ -201,23 +215,17 @@ namespace GameScene
                 }
             }
 
-            switch (currentState)
+            if (!IsGenerating && world != null && playerUnity != null)
             {
-                case GameScene.GameState.PAUSE_MENU:
-                case GameScene.GameState.GAME:
-                    {
-                        if (world != null && playerUnity != null)
-                        {
-                            surroundingsUnity.UpdateSkyColor();
-                            playerUnity.UpdateControlled();
-                            world.Update(Time.deltaTime);
-                            UpdateAnimatedTexture();
-                        }
-                        break;
-                    }
+                if (xxx == 0) {
+                    xxx = 1;
+                    return;
+                }
+                surroundingsUnity.UpdateSkyColor();
+                playerUnity.UpdateControlled();
+                world.Update(Time.deltaTime);
+                UpdateAnimatedTexture();
             }
-
-            currentState = state;
         }
 
         private float textureAnimationTimer;

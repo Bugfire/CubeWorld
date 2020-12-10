@@ -14,6 +14,7 @@ namespace Shared
         private const string GAME_SCENE_NAME = "Game";
 
         private static GameLaunchArgs gameLaunchArgs;
+        private static string activateSceneName = null;
 
         #region Unity lifecycles
 
@@ -23,14 +24,14 @@ namespace Shared
             {
                 if (SceneManager.sceneCount == 1)
                 {
-                    SceneManager.LoadScene(TITLE_SCENE_NAME, LoadSceneMode.Additive);
+                    loadScene(TITLE_SCENE_NAME);
                 }
             }
             else
             {
                 if (!hasScene(COMMON_SCENE_NAME))
                 {
-                    SceneManager.LoadScene(COMMON_SCENE_NAME, LoadSceneMode.Additive);
+                    loadScene(COMMON_SCENE_NAME);
                 }
             }
         }
@@ -51,8 +52,7 @@ namespace Shared
             {
                 return;
             }
-            SceneManager.LoadScene(TITLE_SCENE_NAME, LoadSceneMode.Additive);
-            SceneManager.UnloadScene(GAME_SCENE_NAME);
+            loadScene(TITLE_SCENE_NAME, GAME_SCENE_NAME);
         }
 
         public static bool SetupGameWithArgs(GameScene.GameManagerUnity gameManagerUnity)
@@ -91,8 +91,16 @@ namespace Shared
                 gameLaunchArgs = null;
                 return;
             }
-            SceneManager.LoadScene(GAME_SCENE_NAME, LoadSceneMode.Additive);
-            SceneManager.UnloadScene(TITLE_SCENE_NAME);
+            loadScene(GAME_SCENE_NAME, TITLE_SCENE_NAME);
+        }
+
+        private static void loadScene(string sceneName, string unloadSceneName = null)
+        {
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+            if (unloadSceneName != null)
+            {
+                SceneManager.UnloadScene(unloadSceneName);
+            }
         }
 
         #endregion

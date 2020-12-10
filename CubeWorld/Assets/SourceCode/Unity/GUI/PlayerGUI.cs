@@ -59,7 +59,7 @@ public class PlayerGUI : MonoBehaviour
     {
         UpdateFPS();
 
-        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME)
+        if (playerUnity.gameManagerUnity.IsPlayable)
             activeGUIState.ProcessKeys(gameController);
     }
 
@@ -89,8 +89,7 @@ public class PlayerGUI : MonoBehaviour
     {
         playerUnity.DrawUnderWaterTexture();
 
-        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME ||
-            playerUnity.gameManagerUnity.GetState() == GameScene.GameState.PAUSE_MENU)
+        if (!playerUnity.gameManagerUnity.IsGenerating)
             activeGUIState.Draw();
 	}
 }

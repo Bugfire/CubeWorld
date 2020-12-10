@@ -10,7 +10,7 @@
 
         #region GameLaunchArgs implements
 
-        public void Setup(GameManagerUnity gameManagerUnity)
+        public void Setup(GameScene.GameManagerUnity gameManagerUnity)
         {
             gameManagerUnity.Generate(this);
         }

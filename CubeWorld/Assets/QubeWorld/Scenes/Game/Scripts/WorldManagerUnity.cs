@@ -11,11 +11,11 @@ namespace GameScene
         private GameManagerUnity gameManagerUnity;
         private CubeWorld.World.Generator.GeneratorProcess worldGeneratorProcess;
 
-        static private Dictionary<int, System.DateTime> worldFileInfoCache = new Dictionary<int, System.DateTime>();
-
         public bool IsReady { get { return worldGeneratorProcess == null; } }
         public string ProcessText { get { return worldGeneratorProcess.ToString(); } }
         public float Progress { get { return worldGeneratorProcess.GetProgress() / 100f; } }
+
+        #region Public methods
 
         public WorldManagerUnity(GameManagerUnity gameManagerUnity)
         {
@@ -34,48 +34,10 @@ namespace GameScene
             }
         }
 
-        static public System.DateTime GetWorldFileInfo(int n)
-        {
-            if (worldFileInfoCache.ContainsKey(n))
-            {
-                return worldFileInfoCache[n];
-            }
-            try
-            {
-                var path = GetWorldFilePath(n);
-                if (!System.IO.File.Exists(path))
-                {
-                    return worldFileInfoCache[n] = System.DateTime.MinValue;
-                }
-
-                var fs = System.IO.File.OpenRead(path);
-                try
-                {
-                    var br = new System.IO.BinaryReader(fs);
-                    if (br.ReadString() == CubeWorld.World.CubeWorld.VERSION_INFO)
-                    {
-                        worldFileInfoCache[n] = System.IO.File.GetLastWriteTime(path);
-                    }
-                    else
-                    {
-                        worldFileInfoCache[n] = System.DateTime.MinValue;
-                    }
-                }
-                finally
-                {
-                    fs.Close();
-                }
-            }
-            catch (System.Exception)
-            {
-                return System.DateTime.MinValue;
-            }
-            return worldFileInfoCache[n];
-        }
-
         public bool LoadWorld(int n)
         {
-            if (!System.IO.File.Exists(GetWorldFilePath(n)))
+            var data = Shared.WorldFileIO.Load(n);
+            if (data == null)
             {
                 return false;
             }
@@ -85,8 +47,6 @@ namespace GameScene
             var configurations = Shared.Configure.Load();
 
             gameManagerUnity.LoadCustomTextures();
-
-            var data = System.IO.File.ReadAllBytes(GetWorldFilePath(n));
 
             var config = new CubeWorld.Configuration.Config();
             config.tileDefinitions = configurations.tileDefinitions;
@@ -101,7 +61,7 @@ namespace GameScene
 
             gameManagerUnity.surroundingsUnity.CreateSurroundings(gameManagerUnity.world.configSurroundings);
 
-            gameManagerUnity.SetState(GameScene.GameState.GENERATING);
+            gameManagerUnity.IsGenerating = true;
             return true;
         }
 
@@ -109,9 +69,7 @@ namespace GameScene
         {
             var map = gameManagerUnity.world.Save();
 
-            System.IO.File.WriteAllBytes(GetWorldFilePath(n), map);
-
-            worldFileInfoCache.Clear();
+            Shared.WorldFileIO.Save(n, map);
         }
 
         public void JoinMultiplayerGame(string server, int port)
@@ -120,7 +78,7 @@ namespace GameScene
 
             worldGeneratorProcess = new GeneratorProcess(new MultiplayerGameLoaderGenerator(this, server, port), null);
 
-            gameManagerUnity.SetState(GameScene.GameState.GENERATING);
+            gameManagerUnity.IsGenerating = true;
         }
 
         private class MultiplayerGameLoaderGenerator : CubeWorldGenerator
@@ -175,15 +133,7 @@ namespace GameScene
 
             gameManagerUnity.surroundingsUnity.CreateSurroundings(gameManagerUnity.world.configSurroundings);
 
-            gameManagerUnity.SetState(GameScene.GameState.GENERATING);
-        }
-
-        #region Private methods
-
-        private static string GetWorldFilePath(int n)
-        {
-            var exePath = System.IO.Directory.GetParent(Application.dataPath).FullName;
-            return System.IO.Path.Combine(exePath, "world" + n + ".map");
+            gameManagerUnity.IsGenerating = true;
         }
 
         #endregion

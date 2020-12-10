@@ -5,7 +5,7 @@ namespace Shared
     public class OptionsMenu : MonoBehaviour
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
+        private GameScene.GameManagerUnity gameManagerUnity;
         [SerializeField]
         private MenuItem drawDistance;
         [SerializeField]

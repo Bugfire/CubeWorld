@@ -67,7 +67,7 @@ public class PlayerControllerUnity : MonoBehaviour
 
     public void UpdateControlled()
     {
-        if (playerUnity.gameManagerUnity.GetState() == GameScene.GameState.GAME &&
+        if (playerUnity.gameManagerUnity.IsPlayable &&
             playerUnity.playerGUI.ActiveState == PlayerGUI.State.NORMAL)
         {
             if (firstUpdate)
@@ -201,10 +201,6 @@ public class PlayerControllerUnity : MonoBehaviour
 
     private void UpdateUserActions()
     {
-        if (playerUnity.gameManagerUnity.GetState() != GameScene.GameState.GAME &&
-            playerUnity.gameManagerUnity.GetState() != GameScene.GameState.PAUSE_MENU) {
-            return;
-        }
         if (userActionCooldown > 0.0f)
         {
             userActionCooldown -= Time.deltaTime;
@@ -214,6 +210,9 @@ public class PlayerControllerUnity : MonoBehaviour
             return;
         }
 
+        if (!playerUnity.gameManagerUnity.IsPlayable) {
+            return;
+        }
         if (!gameController.Action)
         {
             return;

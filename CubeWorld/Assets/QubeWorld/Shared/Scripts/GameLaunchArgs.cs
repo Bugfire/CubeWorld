@@ -2,6 +2,6 @@
 {
     public interface GameLaunchArgs
     {
-        void Setup(GameManagerUnity gameManagerUnity);
+        void Setup(GameScene.GameManagerUnity gameManagerUnity);
     }
 }

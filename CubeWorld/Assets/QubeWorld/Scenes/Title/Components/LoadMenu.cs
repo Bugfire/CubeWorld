@@ -34,7 +34,7 @@ namespace TitleScene
         {
             for (int i = 0; i < 5; i++)
             {
-                System.DateTime fileDateTime = WorldManagerUnity.GetWorldFileInfo(i);
+                var fileDateTime = Shared.WorldFileIO.GetInfo(i);
 
                 if (fileDateTime != System.DateTime.MinValue)
                 {

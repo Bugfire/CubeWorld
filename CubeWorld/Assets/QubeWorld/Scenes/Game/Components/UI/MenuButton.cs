@@ -41,7 +41,7 @@ namespace GameScene
             {
                 return;
             }
-            if (gameManagerUnity.GetState() == GameState.GAME)
+            if (activator.State == MenuState.NONE)
             {
                 openPauseMenu();
             }

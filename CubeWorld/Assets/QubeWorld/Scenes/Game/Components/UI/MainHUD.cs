@@ -13,8 +13,6 @@ namespace GameScene
         [SerializeField]
         private GameController gameController;
 
-        private GameState lastState;
-
         /*
         *              NONE
         *                |
@@ -28,36 +26,35 @@ namespace GameScene
         *       +--------------- PAUSE
         */
 
+        private bool lastIsGenerating;
 
         #region Unity lifecycles
 
         void Start()
         {
-            lastState = GameState.NONE;
+            lastIsGenerating = false;
             progressBar.SetVisible(false);
             gameController.SetVisible(false);
         }
 
         void Update()
         {
-            var state = gameManagerUnity.GetState();
-            if (state != lastState)
+            var isGenerating = gameManagerUnity.IsGenerating;
+            if (isGenerating == lastIsGenerating)
             {
-                switch (state)
-                {
-                    case GameState.GENERATING:
-                        progressBar.SetVisible(true);
-                        gameController.SetVisible(false);
-                        break;
-                    case GameState.GAME:
-                        progressBar.SetVisible(false);
-                        gameController.SetVisible(true);
-                        break;
-                    case GameState.PAUSE_MENU:
-                        break;
-                }
-                lastState = state;
+                return;
             }
+            if (isGenerating)
+            {
+                progressBar.SetVisible(true);
+                gameController.SetVisible(false);
+            }
+            else
+            {
+                progressBar.SetVisible(false);
+                gameController.SetVisible(true);
+            }
+            lastIsGenerating = isGenerating;
         }
 
         #endregion

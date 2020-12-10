@@ -55,8 +55,7 @@ public class PlayerUnity : AvatarUnity
     {
         playerController.UpdateControlled();
 
-        if (gameManagerUnity.GetState() == GameScene.GameState.GAME ||
-            gameManagerUnity.GetState() == GameScene.GameState.PAUSE_MENU)
+        if (gameManagerUnity.IsPlayable)
         {
             UpdatePlayerPosition();
         }
