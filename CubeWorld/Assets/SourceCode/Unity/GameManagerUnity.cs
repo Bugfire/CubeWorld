@@ -32,7 +32,7 @@ public class GameManagerUnity : MonoBehaviour
     [SerializeField]
     public GameController gameController;
     [SerializeField]
-    private Menu.Activator menuActivator;
+    private Game.Activator menuActivator;
     [SerializeField]
     private Message message;
 
@@ -46,11 +46,10 @@ public class GameManagerUnity : MonoBehaviour
     public void Start()
     {
         MeshUtils.InitStaticValues();
-        CubeWorldPlayerPreferences.LoadPreferences();
         PreferencesUpdated();
 
-        state = currentState = GameState.TITLE_MENU;
-        menuActivator.State = Menu.State.TITLE;
+        state = currentState = GameState.GENERATING;
+        menuActivator.State = Game.MenuState.NONE;
 
 		sectorManagerUnity = new SectorManagerUnity(this);
 		objectsManagerUnity = new CWObjectsManagerUnity(this);
@@ -58,7 +57,19 @@ public class GameManagerUnity : MonoBehaviour
 
         worldManagerUnity = new WorldManagerUnity(this);
 
-        UnityNativeHandler.GameToWeb("Kernel", "Initialized");
+        if (!Shared.SceneLoader.SetupGameWithArgs(this))
+        {
+            Debug.Log("No args. Run with default arguments...");
+            var generateArgs = new Shared.GenerateArgs();
+            Generate(
+                    generateArgs.DayInfoOffset,
+                    generateArgs.GeneratorOffset,
+                    generateArgs.SizeOffset,
+                    generateArgs.GameplayOffset,
+                    generateArgs.Multiplayer);
+        }
+
+        Common.NativeHandler.SendStartEvent();
 	}
 
     public void DestroyWorld()
@@ -196,7 +207,7 @@ public class GameManagerUnity : MonoBehaviour
     {
         GetComponent<Camera>().enabled = false;
 
-        message.AddMessage("Welcome!");
+        Common.Message.AddMessage("Welcome!");
         state = GameState.GAME;
     }
 
@@ -206,7 +217,7 @@ public class GameManagerUnity : MonoBehaviour
             return false;
         }
         state = GameState.PAUSE_MENU;
-        menuActivator.State = Menu.State.PAUSE;
+        menuActivator.State = Game.MenuState.PAUSE;
         return true;
     }
 
@@ -216,7 +227,7 @@ public class GameManagerUnity : MonoBehaviour
             return;
         }
         state = GameState.GAME;
-        menuActivator.State = Menu.State.NONE;
+        menuActivator.State = Game.MenuState.NONE;
     }
 
     public void ReturnToTitleMenu()
@@ -225,8 +236,7 @@ public class GameManagerUnity : MonoBehaviour
 
         GetComponent<Camera>().enabled = true;
 
-        state = GameState.TITLE_MENU;
-        menuActivator.State = Menu.State.TITLE;
+        Shared.SceneLoader.GoTitle();
     }
 
     public void Update()
@@ -338,7 +348,7 @@ public class GameManagerUnity : MonoBehaviour
         }
 
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.State = Menu.State.NONE;
+        menuActivator.State = Game.MenuState.NONE;
     }
 
     public void ReGenerate() {
@@ -347,7 +357,7 @@ public class GameManagerUnity : MonoBehaviour
         }
         GetComponent<Camera>().enabled = true;
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.State = Menu.State.NONE;
+        menuActivator.State = Game.MenuState.NONE;
     }
 }
 
