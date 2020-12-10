@@ -2,7 +2,7 @@
 
 namespace Menu
 {
-    public class Main : MonoBehaviour
+    public class Title : MonoBehaviour
     {
         [SerializeField]
         private Activator activator;
@@ -11,27 +11,27 @@ namespace Menu
 
         public void OnCreateRandomWorld()
         {
-            activator.SetState(State.GENERATOR);
+            activator.State = State.GENERATOR;
         }
 
         public void OnLoadWorld()
         {
-            activator.SetState(State.LOAD);
+            activator.State = State.LOAD;
         }
 
         public void OnJoinMultiPlayer()
         {
-            activator.SetState(State.JOIN_MULTIPLAYER);
+            activator.State = State.JOIN_MULTIPLAYER;
         }
 
         public void OnOptions()
         {
-            activator.SetState(State.OPTIONS);
+            activator.State = State.OPTIONS;
         }
 
         public void OnAbout()
         {
-            activator.SetState(State.ABOUT);
+            activator.State = State.ABOUT;
         }
 
         #endregion

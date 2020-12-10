@@ -90,7 +90,7 @@ public class PlayerGUI : MonoBehaviour
         playerUnity.DrawUnderWaterTexture();
 
         if (playerUnity.gameManagerUnity.GetState() == GameState.GAME ||
-            playerUnity.gameManagerUnity.GetState() == GameState.PAUSE)
+            playerUnity.gameManagerUnity.GetState() == GameState.PAUSE_MENU)
             activeGUIState.Draw();
 	}
 }

@@ -202,7 +202,7 @@ public class PlayerControllerUnity : MonoBehaviour
     private void UpdateUserActions()
     {
         if (playerUnity.gameManagerUnity.GetState() != GameState.GAME &&
-            playerUnity.gameManagerUnity.GetState() != GameState.PAUSE) {
+            playerUnity.gameManagerUnity.GetState() != GameState.PAUSE_MENU) {
             return;
         }
         if (userActionCooldown > 0.0f)

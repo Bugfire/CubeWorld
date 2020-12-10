@@ -86,11 +86,18 @@ public class WebGLInputWorkaround : BaseInput
     private List<TouchInfo> activeTouches = new List<TouchInfo>(100);
     private List<TouchInfo> patchedTouches = new List<TouchInfo>(100);
 
-    void Start()
+    #region Unity lifecycles
+
+    protected override void Start()
     {
+        base.Start();
         Debug.LogFormat("Regsiter WebGLInputWorkaround {0}", VERSION);
         gameObject.GetComponent<StandaloneInputModule>().inputOverride = this;
     }
+
+    #endregion
+
+    #region BaseInput Overrides
 
     public override int touchCount
     {
@@ -120,6 +127,10 @@ public class WebGLInputWorkaround : BaseInput
             return Input.GetTouch(index);
         }
     }
+
+    #endregion
+
+    #region Private methods
 
     private void check()
     {
@@ -235,4 +246,6 @@ public class WebGLInputWorkaround : BaseInput
             }
         }
     }
+
+    #endregion
 }

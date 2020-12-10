@@ -2,8 +2,8 @@ namespace Menu
 {
     public enum State
     {
-        NONE,
-        MAIN,
+        NONE, // 未表示状態
+        TITLE,
         GENERATOR,
         OPTIONS,
         PAUSE,

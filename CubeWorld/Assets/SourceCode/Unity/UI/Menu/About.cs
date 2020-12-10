@@ -29,7 +29,7 @@ namespace Menu
             if (counter == 1)
             {
                 // 表示前にテキストを設定してもレイアウトが走らないので崩れる。なんでや。
-                text.text += license.text;
+                text.text = license.text;
             }
         }
 

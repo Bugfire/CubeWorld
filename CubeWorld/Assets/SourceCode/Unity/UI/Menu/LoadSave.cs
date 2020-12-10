@@ -26,7 +26,7 @@ namespace Menu
 
         public void OnSlot(int number)
         {
-            var isLoad = activator.GetState() == State.LOAD;
+            var isLoad = activator.State == State.LOAD;
             if (isLoad)
             {
                 gameManagerUnity.worldManagerUnity.LoadWorld(number - 1);
@@ -44,7 +44,7 @@ namespace Menu
 
         private void UpdateUI()
         {
-            var isLoad = activator.GetState() == State.LOAD;
+            var isLoad = activator.State == State.LOAD;
             titleText.text = isLoad ? "ロード" : "セーブ";
 
             for (int i = 0; i < 5; i++)

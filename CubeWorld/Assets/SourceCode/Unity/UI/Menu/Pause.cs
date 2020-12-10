@@ -29,17 +29,17 @@ namespace Menu
 
         public void OnSaveWorld()
         {
-            activator.SetState(Menu.State.SAVE);
+            activator.State = Menu.State.SAVE;
         }
 
         public void OnOptions()
         {
-            activator.SetState(Menu.State.OPTIONS);
+            activator.State = Menu.State.OPTIONS;
         }
 
         public void OnExitToMainMenu()
         {
-            gameManagerUnity.ReturnToMainMenu();
+            gameManagerUnity.ReturnToTitleMenu();
         }
 
         public void OnReturnToGame()

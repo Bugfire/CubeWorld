@@ -75,11 +75,6 @@ public class GameController : MonoBehaviour
 
     #region Public methods
 
-    public void OnClickBarrier()
-    {
-        activator.SetLastState();
-    }
-
     public void SetVisible(bool visible)
     {
         gameObject.SetActive(visible);

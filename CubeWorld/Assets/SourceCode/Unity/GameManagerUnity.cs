@@ -49,8 +49,8 @@ public class GameManagerUnity : MonoBehaviour
         CubeWorldPlayerPreferences.LoadPreferences();
         PreferencesUpdated();
 
-        state = currentState = GameState.MAIN_MENU;
-        menuActivator.SetState(Menu.State.MAIN);
+        state = currentState = GameState.TITLE_MENU;
+        menuActivator.State = Menu.State.TITLE;
 
 		sectorManagerUnity = new SectorManagerUnity(this);
 		objectsManagerUnity = new CWObjectsManagerUnity(this);
@@ -92,7 +92,7 @@ public class GameManagerUnity : MonoBehaviour
 
     public bool IsPaused()
     {
-        return state == GameState.PAUSE;
+        return state == GameState.PAUSE_MENU;
     }
 
     static private string GetConfigText(string resourceName)
@@ -205,28 +205,28 @@ public class GameManagerUnity : MonoBehaviour
         if (state != GameState.GAME) {
             return false;
         }
-        state = GameState.PAUSE;
-        menuActivator.SetState(Menu.State.PAUSE);
+        state = GameState.PAUSE_MENU;
+        menuActivator.State = Menu.State.PAUSE;
         return true;
     }
 
     public void Unpause()
     {
-        if (state != GameState.PAUSE) {
+        if (state != GameState.PAUSE_MENU) {
             return;
         }
         state = GameState.GAME;
-        menuActivator.SetState(Menu.State.NONE);
+        menuActivator.State = Menu.State.NONE;
     }
 
-    public void ReturnToMainMenu()
+    public void ReturnToTitleMenu()
     {
         DestroyWorld();
 
         GetComponent<Camera>().enabled = true;
 
-        state = GameState.MAIN_MENU;
-        menuActivator.SetState(Menu.State.MAIN);
+        state = GameState.TITLE_MENU;
+        menuActivator.State = Menu.State.TITLE;
     }
 
     public void Update()
@@ -256,7 +256,7 @@ public class GameManagerUnity : MonoBehaviour
                 break;
             }
 
-            case GameState.PAUSE:
+            case GameState.PAUSE_MENU:
             case GameState.GAME:
             {
                 if (world != null && playerUnity != null)
@@ -338,7 +338,7 @@ public class GameManagerUnity : MonoBehaviour
         }
 
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.SetState(Menu.State.NONE);
+        menuActivator.State = Menu.State.NONE;
     }
 
     public void ReGenerate() {
@@ -347,7 +347,7 @@ public class GameManagerUnity : MonoBehaviour
         }
         GetComponent<Camera>().enabled = true;
         worldManagerUnity.CreateRandomWorld(lastConfig);
-        menuActivator.SetState(Menu.State.NONE);
+        menuActivator.State = Menu.State.NONE;
     }
 }
 

@@ -56,7 +56,7 @@ namespace Menu
             // gameManagerUnity.worldManagerUnity.JoinMultiplayerGame(ss[0], System.Int32.Parse(ss[1]));
             wwwRequest = null;
             servers = null;
-            activator.SetState(State.NONE);
+            activator.State = State.NONE;
         }
 
         public void OnRefresh()

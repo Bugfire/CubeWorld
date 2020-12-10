@@ -1,8 +1,8 @@
 ﻿public enum GameState
 {
     NONE,
-    MAIN_MENU,
+    TITLE_MENU,
     GAME,
     GENERATING,
-    PAUSE
+    PAUSE_MENU
 }

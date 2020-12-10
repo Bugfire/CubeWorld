@@ -75,7 +75,6 @@ public class Message : MonoBehaviour
             return;
         }
 
-        var lastRemoved = -1;
         var stringBuilder = new System.Text.StringBuilder(1024);
         for (var i = 0; i < messages.Count; i++)
         {

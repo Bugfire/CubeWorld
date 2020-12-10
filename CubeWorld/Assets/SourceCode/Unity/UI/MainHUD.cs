@@ -43,7 +43,7 @@ public class MainHUD : MonoBehaviour
         {
             switch (state)
             {
-                case GameState.MAIN_MENU:
+                case GameState.TITLE_MENU:
                     gameController.SetVisible(false);
                     break;
                 case GameState.GENERATING:
@@ -54,7 +54,7 @@ public class MainHUD : MonoBehaviour
                     progressBar.SetVisible(false);
                     gameController.SetVisible(true);
                     break;
-                case GameState.PAUSE:
+                case GameState.PAUSE_MENU:
                     break;
             }
             lastState = state;
