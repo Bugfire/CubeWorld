@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameScene
 {
-    public class Message : MonoBehaviour
+    public class MessageBox : MonoBehaviour
     {
         [SerializeField]
         private UnityEngine.UI.Image backgroundImage;

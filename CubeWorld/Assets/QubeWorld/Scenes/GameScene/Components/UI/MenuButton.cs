@@ -6,9 +6,7 @@ namespace GameScene
     public class MenuButton : MonoBehaviour
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
-        [SerializeField]
-        private Activator activator;
+        private GameScene gameScene;
 
         #region Unity lifecycles
 
@@ -32,7 +30,7 @@ namespace GameScene
 
         private void openPauseMenu()
         {
-            gameManagerUnity.Pause();
+            gameScene.Pause();
         }
 
         private void updateInput()
@@ -41,13 +39,13 @@ namespace GameScene
             {
                 return;
             }
-            if (activator.State == MenuState.NONE)
+            if (gameScene.State == MenuState.NONE)
             {
                 openPauseMenu();
             }
             else
             {
-                activator.SetLastState();
+                gameScene.SetLastState();
             }
         }
 

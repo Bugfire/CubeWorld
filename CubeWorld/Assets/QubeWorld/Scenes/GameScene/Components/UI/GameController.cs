@@ -6,8 +6,6 @@ namespace GameScene
     public class GameController : MonoBehaviour
     {
         [SerializeField]
-        private Activator activator;
-        [SerializeField]
         private MovePointer movePointer;
         [SerializeField]
         private JumpButton jumpButton;

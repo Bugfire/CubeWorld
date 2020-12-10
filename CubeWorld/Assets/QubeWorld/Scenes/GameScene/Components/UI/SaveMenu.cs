@@ -7,7 +7,7 @@ namespace GameScene
         [SerializeField]
         private GameManagerUnity gameManagerUnity;
         [SerializeField]
-        private Activator activator;
+        private GameScene activator;
         [SerializeField]
         private Shared.MenuItem[] slots;
 

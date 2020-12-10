@@ -303,8 +303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd88b9e9aa014d00b83892c3954dc42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
-  activator: {fileID: 1292878071}
 --- !u!95 &51212538
 Animator:
   serializedVersion: 3
@@ -1855,7 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ccc78b51a244602bfa423f84581aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
+  gameScene: {fileID: 1292878071}
 --- !u!114 &476175510 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11400002, guid: 919528d8813a2f741b81cafa47510fd1,
@@ -2491,7 +2489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9e30ab412e54082841de40b5f526e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
+  gameScene: {fileID: 1292878071}
   moveIndicator: {fileID: 1335324581}
 --- !u!114 &531573685
 MonoBehaviour:
@@ -3376,7 +3374,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1292878067}
-  - component: {fileID: 1292878072}
   - component: {fileID: 1292878071}
   - component: {fileID: 1292878070}
   - component: {fileID: 1292878069}
@@ -3487,26 +3484,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2ac835521eee490993d6ad65839fe22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 1888077432}
   gameManagerUnity: {fileID: 476175510}
   optionsMenu: {fileID: 1765957198}
   pauseMenu: {fileID: 272453323}
   saveMenu: {fileID: 172957381}
-  barrier: {fileID: 1622093023}
---- !u!114 &1292878072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292878066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a8f1267efb6340a39bcecf0f641bb72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
   progressBar: {fileID: 262050133}
-  gameController: {fileID: 1888077432}
+  messageBox: {fileID: 2015605430}
+  barrier: {fileID: 1622093023}
 --- !u!20 &1292878073
 Camera:
   m_ObjectHideFlags: 0
@@ -4178,7 +4163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee533b215fd742999ef30a78e23a220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
+  gameScene: {fileID: 1292878071}
   animator: {fileID: 1490576952}
 --- !u!1 &1622093023
 GameObject:
@@ -4346,8 +4331,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 0}
-  m_SizeDelta: {x: 588, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688469247
 MonoBehaviour:
@@ -4879,6 +4864,10 @@ PrefabInstance:
       propertyPath: message
       value: 
       objectReference: {fileID: 2015605430}
+    - target: {fileID: 11400002, guid: 919528d8813a2f741b81cafa47510fd1, type: 3}
+      propertyPath: gameScene
+      value: 
+      objectReference: {fileID: 1292878071}
     m_RemovedComponents:
     - {fileID: 2000000, guid: 919528d8813a2f741b81cafa47510fd1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 919528d8813a2f741b81cafa47510fd1, type: 3}
@@ -5195,8 +5184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d3fbdda3e49649349131612f94e7593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
-  activator: {fileID: 1292878071}
+  gameScene: {fileID: 1292878071}
 --- !u!114 &1882324297 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4128470281459613076, guid: e388bff354f5a412092d0276727a7a15,
@@ -5264,7 +5252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4c1219353c54ea3ad2ab0653d9e821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activator: {fileID: 1292878071}
   movePointer: {fileID: 531573683}
   jumpButton: {fileID: 1490576953}
   screenInput: {fileID: 457043130}
@@ -5586,8 +5573,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6046a029be6764119a8e796a412282d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManagerUnity: {fileID: 476175510}
-  activator: {fileID: 1292878071}
   buildTouchAnimator: {fileID: 406195156}
   attackTouchAnimator: {fileID: 792024500}
 --- !u!1 &2015605424
@@ -5599,13 +5584,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2015605425}
+  - component: {fileID: 2015605430}
   - component: {fileID: 2015605427}
   - component: {fileID: 2015605426}
   - component: {fileID: 2015605429}
   - component: {fileID: 2015605428}
-  - component: {fileID: 2015605430}
   m_Layer: 5
-  m_Name: Message
+  m_Name: MessageBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

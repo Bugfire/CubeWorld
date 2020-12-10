@@ -6,10 +6,6 @@ namespace GameScene
     public class ActionSelect : MonoBehaviour
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
-        [SerializeField]
-        private Activator activator;
-        [SerializeField]
         private Animator buildTouchAnimator;
         [SerializeField]
         private Animator attackTouchAnimator;

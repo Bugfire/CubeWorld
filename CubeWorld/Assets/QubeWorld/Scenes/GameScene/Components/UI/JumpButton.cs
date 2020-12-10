@@ -7,7 +7,7 @@ namespace GameScene
     public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
+        private GameScene gameScene;
         [SerializeField]
         private Animator animator;
 
@@ -32,7 +32,7 @@ namespace GameScene
 
         void Update()
         {
-            if (!gameManagerUnity.IsPlayable)
+            if (!gameScene.IsPlayable)
             {
                 resetInput();
             }

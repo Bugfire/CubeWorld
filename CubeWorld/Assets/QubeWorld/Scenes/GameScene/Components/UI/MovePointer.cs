@@ -7,7 +7,7 @@ namespace GameScene
     public class MovePointer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
+        private GameScene gameScene;
         [SerializeField]
         private RectTransform moveIndicator;
 
@@ -33,7 +33,7 @@ namespace GameScene
 
         void Update()
         {
-            if (!gameManagerUnity.IsPlayable)
+            if (!gameScene.IsPlayable)
             {
                 resetInput();
             }

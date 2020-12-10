@@ -23,17 +23,15 @@ namespace GameScene
         public WorldManagerUnity worldManagerUnity;
 
         [SerializeField]
-        private GameScene.ProgressBar progressBar;
+        private ProgressBar progressBar;
 
         [HideInInspector]
         public PlayerUnity playerUnity;
 
         [SerializeField]
-        public GameScene.GameController gameController;
+        public GameController gameController;
         [SerializeField]
-        private GameScene.Activator menuActivator;
-        [SerializeField]
-        private GameScene.Message message;
+        private GameScene gameScene;
 
         public SectorManagerUnity sectorManagerUnity;
 
@@ -46,16 +44,16 @@ namespace GameScene
             get
             {
                 return
-                    menuActivator.State == MenuState.PAUSE ||
-                    menuActivator.State == MenuState.OPTIONS ||
-                    menuActivator.State == MenuState.SAVE;
+                    gameScene.State == MenuState.PAUSE ||
+                    gameScene.State == MenuState.OPTIONS ||
+                    gameScene.State == MenuState.SAVE;
             }
         }
 
         public bool IsPlayable {
             get
             {
-                return !IsGenerating && menuActivator.State == MenuState.NONE;
+                return !IsGenerating && gameScene.State == MenuState.NONE;
             }
         }
 
@@ -69,7 +67,7 @@ namespace GameScene
             PreferencesUpdated();
 
             IsGenerating = true;
-            menuActivator.State = GameScene.MenuState.NONE;
+            gameScene.State = MenuState.NONE;
 
             sectorManagerUnity = new SectorManagerUnity(this);
             objectsManagerUnity = new CWObjectsManagerUnity(this);
@@ -162,11 +160,11 @@ namespace GameScene
 
         public bool Pause()
         {
-            if (menuActivator.State != MenuState.NONE)
+            if (gameScene.State != MenuState.NONE)
             {
                 return false;
             }
-            menuActivator.State = GameScene.MenuState.PAUSE;
+            gameScene.State = MenuState.PAUSE;
             return true;
         }
 
@@ -176,14 +174,12 @@ namespace GameScene
             {
                 return;
             }
-            menuActivator.State = GameScene.MenuState.NONE;
+            gameScene.State = MenuState.NONE;
         }
 
         public void ReturnToTitleMenu()
         {
             DestroyWorld();
-
-            GetComponent<Camera>().enabled = true;
 
             Shared.SceneLoader.GoToTitleScene();
         }
@@ -205,7 +201,6 @@ namespace GameScene
                     PreferencesUpdated();
                     CommonScene.Message.AddMessage("Welcome!");
                     IsGenerating = false;
-                    xxx = 0;
                 }
                 else
                 {
@@ -216,10 +211,6 @@ namespace GameScene
 
             if (!IsGenerating && world != null && playerUnity != null)
             {
-                if (xxx == 0) {
-                    xxx = 1;
-                    return;
-                }
                 surroundingsUnity.UpdateSkyColor();
                 playerUnity.UpdateControlled();
                 world.Update(Time.deltaTime);
@@ -286,7 +277,7 @@ namespace GameScene
             }
 
             worldManagerUnity.CreateRandomWorld(lastConfig);
-            menuActivator.State = GameScene.MenuState.NONE;
+            gameScene.State = MenuState.NONE;
         }
 
         public void ReGenerate()
@@ -297,7 +288,7 @@ namespace GameScene
             }
             GetComponent<Camera>().enabled = true;
             worldManagerUnity.CreateRandomWorld(lastConfig);
-            menuActivator.State = GameScene.MenuState.NONE;
+            gameScene.State = MenuState.NONE;
         }
     }
 }

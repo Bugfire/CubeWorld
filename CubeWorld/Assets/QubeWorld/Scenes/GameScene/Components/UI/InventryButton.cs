@@ -5,11 +5,6 @@ namespace GameScene
 {
     public class InventryButton : MonoBehaviour
     {
-        [SerializeField]
-        private GameManagerUnity gameManagerUnity;
-        [SerializeField]
-        private GameScene.Activator activator;
-
         public bool IsOpenInventry
         {
             get

@@ -7,7 +7,7 @@ namespace GameScene
     public class ScreenInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField]
-        private GameManagerUnity gameManagerUnity;
+        private GameScene gameScene;
 
         private const float ROTATE_SCALE = 1 / 30f;
         private const float LONGPRESS_DELTA_TIME_THRESHOLD = 0.4f;
@@ -70,7 +70,7 @@ namespace GameScene
 
         void Update()
         {
-            if (!gameManagerUnity.IsPlayable)
+            if (!gameScene.IsPlayable)
             {
                 resetInput();
             }
