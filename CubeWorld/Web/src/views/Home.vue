@@ -20,20 +20,21 @@
           のために作成されました。
         </li>
         <li>
-          ゲーム部分の制作元
+          ゲーム部分の制作元のレポジトリはこちらです。<br />
           <a href="https://github.com/federicodangelo/CubeWorld"
             >GitHub federicodangelo/CubeWorld</a
           ><br />とても素晴らしいです。
         </li>
         <li>
-          今回の改造実装
+          今回の改造実装のレポジトリはこちらです。<br />
           <a href="https://github.com/Bugfire/CubeWorld"
             >Github Bugfire/CubeWorld</a
           >
         </li>
         <li>
-          ネットワーク周りのありがたい SDK
-          <a href="https://www.photonengine.com/ja/photon">Photon REALTIME</a>
+          ネットワークのありがたいサービスはこちらの無料プランを使わさせていただきました。<br />
+          <a href="https://www.photonengine.com/ja/photon">Photon REALTIME</a><br />
+          楽に実装できました。
         </li>
       </ul>
     </div>
